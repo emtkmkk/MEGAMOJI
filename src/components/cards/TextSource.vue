@@ -191,7 +191,9 @@ export default defineComponent({
               </Space>
             </Space>
           </Fieldset>
-          <Input v-model="conf.fileName" name="ファイル名" block />
+          <Fieldset v-if="showDetails" label="出力ファイル名">
+            <Input v-model="conf.filename" name="出力ファイル名" block />
+          </Fieldset>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
             <Number
                 v-model="conf.letterSpacing"
