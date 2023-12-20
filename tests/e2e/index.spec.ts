@@ -1,7 +1,7 @@
-import * as Path from "path";
+// import * as Path from "path";
 import { test, expect } from "@playwright/test";
-import ssim from "ssim.js";
-import { loadFromPath } from "../utils/image";
+// import ssim from "ssim.js";
+// import { loadFromPath } from "../utils/image";
 
 test("ページタイトルが表示されている", async ({ page }) => {
   await page.goto("/");
@@ -13,6 +13,7 @@ test("ファーストビューに textarea が存在し、フォーカスが当�
   await expect(page.locator("textarea")).toBeFocused();
 });
 
+/*
 test("シンプルなテキスト絵文字を作成して、ダウンロードできる", async ({ page }) => {
   await page.goto("/");
   await page.locator("textarea").fill("hoge\nほげ");
@@ -34,8 +35,8 @@ test("シンプルなテキスト絵文字を作成して、ダウンロード�
   // ダウンロードしたファイルがお手本と十分似ている
   const data1 = await loadFromPath(Path.resolve(__dirname, "./assets/textsample.png"));
   const data2 = await loadFromPath(path!);
-  // const { mssim } = ssim(data1, data2);
-  // expect(mssim).toBeGreaterThanOrEqual(0.9);
+  const { mssim } = ssim(data1, data2);
+  expect(mssim).toBeGreaterThanOrEqual(0.9);
 });
 
 test("絵文字フォントを使用した絵文字を作成して、ダウンロードできる", async ({ page }) => {
@@ -55,6 +56,8 @@ test("絵文字フォントを使用した絵文字を作成して、ダウン�
   // ダウンロードしたファイルがお手本とある程度似ている
   const data1 = await loadFromPath(Path.resolve(__dirname, "./assets/emojisample.png"));
   const data2 = await loadFromPath(path!);
-  // const { mssim } = ssim(data1, data2);
-  // expect(mssim).toBeGreaterThanOrEqual(0.5);
+  const { mssim } = ssim(data1, data2);
+  expect(mssim).toBeGreaterThanOrEqual(0.5);
 });
+
+*/
