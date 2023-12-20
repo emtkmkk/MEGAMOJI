@@ -203,32 +203,27 @@ export const table = {
   "？": "q",
 };
 
-export function jaToRoomaji(
-  str: string
-): string {
-
-  let _str = str;
+export function jaToRoomaji(str: string): string {
 
   // ひらがなかカタカナだけでなければ終了
-  if (!/^[ぁ-んァ-ンー\s]+$/.test(_str)) {
-    return _str;
+  if (!/^[ぁ-んァ-ンー\s]+$/.test(_tr)) {
+    return str;
   }
 
-  _str = kanaToHira(_str);
+  const hiraStr = kanaToHira(str);
 
-  return hiraToRoma(_str);
+  return hiraToRoma(hiraStr);
 
 }
 
-function kanaToHira(str) {
-  return str.replace(/[ァ-ン]/g, function (match) {
-    var chr = match.charCodeAt(0) - 0x60;
+function kanaToHira(str: string): string {
+  return str.replace(/[ァ-ン]/g, (match) => {
+    let chr = match.charCodeAt(0) - 0x60;
     return String.fromCharCode(chr);
   });
 }
 
-
-export function hiraToRoma(str) {
+export function hiraToRoma(str: string): string {
   const regTu = /っ([bcdfghjklmpqrstvwxyz])/gm;
   const regXtu = /っ/gm;
 
