@@ -56,8 +56,8 @@ export default defineComponent({
       <GradientBlock
           :show-details="showDetails"
           :model-value="gradient"
-          :gradientX="gradientX"
-          :gradientY="gradientY"
+          :gradient-x="gradientX"
+          :gradient-y="gradientY"
           :base-color="modelValue"
           @update:model-value="$emit('update:gradient', $event)"
           @update:gradientX="$emit('update:gradientX', $event)"

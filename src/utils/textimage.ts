@@ -86,7 +86,7 @@ export const makeTextImage = (
       outlineColors,
       gradient,
       gradientX,
-      gradientY
+      gradientY,
     )
   ));
   const lineWidths = images.map((canvas) => canvas.width);

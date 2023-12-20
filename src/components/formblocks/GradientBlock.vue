@@ -69,18 +69,18 @@ export default defineComponent({
     <div>
       <Number
           :model-value="gradientX"
-          @update:model-value="$emit('update:gradientX', $event)"
           block
           :min="-100"
           :max="100"
-          :step="1" />
+          :step="1"
+          @update:model-value="$emit('update:gradientX', $event)" />
       <Number
           :model-value="gradientY"
-          @update:model-value="$emit('update:gradientY', $event)"
           block
           :min="-100"
           :max="100"
-          :step="1" />
+          :step="1"
+          @update:model-value="$emit('update:gradientY', $event)" />
     </div>
     <Checkbox
         name="グラデーション"

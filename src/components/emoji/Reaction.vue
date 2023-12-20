@@ -18,8 +18,8 @@ export default defineComponent({
 .reaction {
   display: inline-block;
   max-width: 90%;
-  margin: 6px 0 0;
   padding: 4px;
+  margin: 6px 0 0;
   cursor: pointer;
   background-color: rgba(128, 128, 128, 0.2);
   border: 1px solid transparent;
