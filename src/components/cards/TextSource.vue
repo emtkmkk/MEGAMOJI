@@ -22,6 +22,7 @@ import AlignRight from "../icons/AlignRight.vue";
 import { ColorStop } from "../../types";
 import { absColor } from "../../utils/color";
 import { makeTextImage } from "../../utils/textimage";
+import { jaToRoomaji } from "../../utils/jaToRoomaji";
 import { EMOJI_SIZE } from "../../constants/emoji";
 import fonts from "../../constants/fonts";
 
@@ -129,7 +130,7 @@ export default defineComponent({
           this.conf.gradientY,
           Number(this.conf.letterSpacing) || undefined,
         );
-        const name = this.conf.filename?.replace(/\n/g, "") || this.conf.content.replace(/\n/g, "");
+        const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.conf.content).replace(/\n/g, "");
         this.$emit("render", canvas, name);
       }
       window.setTimeout(() => {
