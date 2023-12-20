@@ -1,4 +1,4 @@
-export const table = {
+export const table:{[key: string]: string} = {
   いぇ: "ye",
   うぁ: "wha",
   うぃ: "wi",
