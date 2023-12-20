@@ -17,7 +17,7 @@ const makeTextImageSingleLine = (
   const canvas = document.createElement("canvas");
   canvas.width = fontHeight * (line.length || 1) * 2;
   canvas.height = fontHeight * 2;
-  canvas.style.letterSpacing = letterSpacing ? Math.round(letterSpacing * fontHeight) + "px" : "";
+  canvas.style.letterSpacing = letterSpacing ? `${Math.round(letterSpacing * fontHeight)}px` : "";
 
   const ctx = canvas.getContext("2d");
   if (!ctx) {
