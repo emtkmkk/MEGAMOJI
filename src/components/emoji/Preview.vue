@@ -51,7 +51,7 @@ export default defineComponent({
 .preview {
   padding: 12px;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 1.4;
   border: 1px solid #ccc;
 }
 
@@ -77,11 +77,14 @@ export default defineComponent({
 }
 
 .large {
-  height: 32px;
+  height: 1.4em;
+  min-height: 1.4em;
+  vertical-align: top;
 }
 
 .in_text {
-  height: 24px;
-  vertical-align: bottom;
+  height: 1.4em;
+  min-height: 1.4em;
+  vertical-align: top;
 }
 </style>

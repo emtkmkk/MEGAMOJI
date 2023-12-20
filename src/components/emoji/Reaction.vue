@@ -17,25 +17,25 @@ export default defineComponent({
 <style scoped>
 .reaction {
   display: inline-block;
-  padding: 3px 6px;
-  margin: 2px;
-  font-size: 14px;
-  line-height: 1;
+  margin: 6px 0px 0px;
+  max-width: 90%;
+  padding: 4px;
   cursor: pointer;
-  background-color: rgba(128, 128, 128, 0.3);
+  background-color: rgba(128, 128, 128, 0.2);
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 4px;
 }
 
 .reaction:hover {
-  background-color: rgba(128, 128, 128, 0.2);
+  background-color: rgba(128, 128, 128, 0.1);
   border-color: currentColor;
 }
 
 .reaction_icon {
   display: inline-block;
-  height: 19px;
-  vertical-align: -5px;
+  height: 1.6em;
+  max-width: 90%;
+  padding: 4px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
