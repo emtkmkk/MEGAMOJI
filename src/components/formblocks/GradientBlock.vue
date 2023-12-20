@@ -2,20 +2,23 @@
 import { defineComponent, PropType } from "vue";
 import Checkbox from "../inputs/Checkbox.vue";
 import Gradient from "../inputs/Gradient.vue";
+import NumberInput from "../inputs/Number.vue";
 import Space from "../global/Space.vue";
 import { ColorStop } from "../../types";
 
 export default defineComponent({
   components: {
-    Checkbox, Gradient, Space,
+    Checkbox, Gradient, Space,Number: NumberInput,
   },
   props: {
     modelValue: { type: Array as PropType<ColorStop[]>, required: true },
+    gradientX: { type: Array as PropType<ColorStop[]>, required: true },
+    gradientY: { type: Array as PropType<ColorStop[]>, required: true },
     baseColor: { type: String, required: true },
     showDetails: { type: Boolean, required: true },
   },
   emits: [
-    "update:modelValue",
+    "update:modelValue", "update:gradientX", "update:gradientY"
   ],
   methods: {
     initializeGradient(): void {
@@ -31,6 +34,8 @@ export default defineComponent({
         this.initializeGradient();
       } else {
         this.$emit("update:modelValue", []);
+        this.$emit("update:gradientX", 0);
+        this.$emit("update:gradientY", 0);
       }
     },
     update(ix: number, value: ColorStop): void {
@@ -61,6 +66,22 @@ export default defineComponent({
         :model-value="modelValue"
         :base-color="baseColor"
         @update:model-value="$emit('update:modelValue', $event)" />
+    <div>
+      <Number
+          :model-value="gradientX"
+          @update:model-value="$emit('update:gradientX', $event)" />
+          block
+          :min="-100"
+          :max="100"
+          :step="1" />
+      <Number
+          :model-value="gradientY"
+          @update:model-value="$emit('update:gradientY', $event)" />
+          block
+          :min="-100"
+          :max="100"
+          :step="1" />
+    </div>
     <Checkbox
         name="グラデーション"
         :model-value="modelValue.length > 0"

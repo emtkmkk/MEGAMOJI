@@ -9,6 +9,7 @@ import NumberInput from "../inputs/Number.vue";
 import Textarea from "../inputs/Textarea.vue";
 import ToggleButton from "../inputs/ToggleButton.vue";
 import Fieldset from "../inputs/Fieldset.vue";
+import Input from "../inputs/Input.vue";
 import Space from "../global/Space.vue";
 import Card from "../global/Card.vue";
 import Grid from "../global/Grid.vue";
@@ -59,10 +60,13 @@ export default defineComponent({
         color: "#ffda00",
         gradient: [] as ColorStop[],
         outlines: [] as string[],
+        gradientX: 0,
+        gradientY: 0,
         font: fonts[0].fonts[0].value,
         /* advanced */
         lineSpacing: 0,
         padding: 0,
+        filename: "",
       },
       showDetails: true,
       /* internals */
@@ -120,7 +124,7 @@ export default defineComponent({
           this.absoluteGradient,
           Number(this.conf.padding),
         );
-        const name = this.conf.content.replace(/\n/g, "");
+        const name = this.conf.filename?.replace(/\n/g, "") || this.conf.content.replace(/\n/g, "");
         this.$emit("render", canvas, name);
       }
       window.setTimeout(() => {
@@ -182,25 +186,28 @@ export default defineComponent({
               </Space>
             </Space>
           </Fieldset>
+          <Input v-model="conf.fileName" name="ファイル名" block :error="!stringIsValid" />
           <Fieldset v-if="showDetails" label="行間 (文字分)">
             <Number
                 v-model="conf.lineSpacing"
                 block
-                :min="0"
-                :max="1"
+                :min="-3"
+                :max="3"
                 :step="0.01" />
           </Fieldset>
           <Fieldset v-if="showDetails" label="パディング (文字分)">
             <Number
                 v-model="conf.padding"
                 block
-                :min="0"
-                :max="1"
+                :min="-3"
+                :max="3"
                 :step="0.01" />
           </Fieldset>
           <FontColorSelectBlock
               v-model="conf.color"
               v-model:gradient="conf.gradient"
+              v-model:gradientX="conf.gradientX"
+              v-model:gradientY="conf.gradientY"
               :show-details="showDetails" />
           <OutlineBlock
               v-model="conf.outlines"

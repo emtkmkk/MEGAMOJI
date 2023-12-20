@@ -16,9 +16,11 @@ export default defineComponent({
     modelValue: { type: String, required: true },
     gradient: { type: Array, required: true },
     showDetails: { type: Boolean, required: true },
+    gradientX: { type: Number, required: true },
+    gradientY: { type: Number, required: true },
   },
   emits: [
-    "update:modelValue", "update:gradient",
+    "update:modelValue", "update:gradient", "update:gradientX", "update:gradientY",
   ],
   data() {
     return {
@@ -54,8 +56,12 @@ export default defineComponent({
       <GradientBlock
           :show-details="showDetails"
           :model-value="gradient"
+          :gradientX="gradientX"
+          :gradientY="gradientY"
           :base-color="modelValue"
           @update:model-value="$emit('update:gradient', $event)" />
+          @update:gradientX="$emit('update:gradientX', $event)" />
+          @update:gradientY="$emit('update:gradientY', $event)" />
     </Space>
   </Fieldset>
 </template>

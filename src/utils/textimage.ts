@@ -10,6 +10,8 @@ const makeTextImageSingleLine = (
   fontHeight: number,
   outlineColors: string[],
   gradient: GradientColorStop[],
+  gradientX?: number,
+  gradientY?: number,
 ): HTMLCanvasElement => {
   const canvas = document.createElement("canvas");
   canvas.width = fontHeight * (line.length || 1) * 2;
@@ -33,7 +35,19 @@ const makeTextImageSingleLine = (
   }
 
   if (gradient.length) {
-    const gradientObj = ctx.createLinearGradient(0, 0, 0, fontHeight + margin * 2);
+    const x0 = gradientX && gradientX < 0
+      ? (fontHeight * (line.length || 1) + margin) * 2 * -gradientX / 100
+      : 0;
+    const y0 = gradientY && gradientY < 0
+      ? (fontHeight + margin) * 2 * -gradientY / 100
+      : 0;
+    const x1 = gradientX && gradientX > 0
+      ? (fontHeight * (line.length || 1) + margin) * 2 * gradientX / 100
+      : 0;
+    const y1 = gradientY && gradientY > 0
+      ? (fontHeight + margin) * 2 * (100 - gradientY) / 100
+      : fontHeight + margin * 2;
+    const gradientObj = ctx.createLinearGradient(x0, y0, x1, y1);
     gradient.forEach((colorStop) => {
       gradientObj.addColorStop(colorStop.pos / 100, colorStop.color);
     });
@@ -57,12 +71,14 @@ export const makeTextImage = (
   outlineColors: string[],
   gradient: GradientColorStop[],
   padding: number,
+  gradientX?: number,
+  gradientY?: number,
 ): HTMLCanvasElement => {
   const lineSpacingPixels = Math.round(lineSpacing * fontHeight);
   const paddingPixels = Math.round(padding * fontHeight);
 
   const images = text.split("\n").map((line) => (
-    makeTextImageSingleLine(line, color, font, fontHeight, outlineColors, gradient)
+    makeTextImageSingleLine(line, color, font, fontHeight, outlineColors, gradient, gradientX, gradientY)
   ));
   const lineWidths = images.map((canvas) => canvas.width);
   const maxWidth = Math.max.apply(null, lineWidths);

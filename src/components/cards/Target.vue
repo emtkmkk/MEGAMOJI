@@ -93,7 +93,7 @@ export default defineComponent({
         /* basic */
         trimming: TRIMMING_OPTIONS[0],
         targetAspect: 1,
-        speed: SPEED_OPTIONS[2],
+        speed: SPEED_OPTIONS[1],
         cells: [1, 1],
         animation: null as (AnimationOption | null),
         animationInvert: false,
@@ -105,7 +105,7 @@ export default defineComponent({
         trimV: [0, 0],
         noCrop: false,
         easing: easings[0],
-        duration: SPEED_OPTIONS[2].value,
+        duration: SPEED_OPTIONS[1].value,
         backgroundColor: "#ffffff",
         transparent: true,
       },
@@ -324,33 +324,37 @@ export default defineComponent({
             <Number
                 v-model="conf.trimH[0]"
                 block
-                :min="baseImage ? - Math.floor(baseImage.width * 0.5) : 0"
-                :max="baseImage ? Math.ceil(baseImage.width * 1.5) : 0" />
+                :step="baseImage ? Math.ceil(baseImage.width / 20) : 1"
+                :min="baseImage ? - Math.floor(baseImage.width * 1) : 0"
+                :max="baseImage ? Math.ceil(baseImage.width * 2) : 0" />
             <Number
                 v-model="conf.trimH[1]"
                 block
-                :min="baseImage ? - Math.floor(baseImage.width * 0.5) : 0"
-                :max="baseImage ? Math.ceil(baseImage.width * 1.5) : 0" />
+                :step="baseImage ? Math.ceil(baseImage.width / 20) : 1"
+                :min="baseImage ? - Math.floor(baseImage.width * 1) : 0"
+                :max="baseImage ? Math.ceil(baseImage.width * 2) : 0" />
           </Fieldset>
           <Fieldset v-if="showDetails" :label="`トリミング (縦) (${baseImage.height})`">
             <Number
                 v-model="conf.trimV[0]"
                 block
-                :min="baseImage ? - Math.floor(baseImage.height * 0.5) : 0"
-                :max="baseImage ? Math.ceil(baseImage.height * 1.5) : 0" />
+                :step="baseImage ? Math.ceil(baseImage.height / 20) : 1"
+                :min="baseImage ? - Math.floor(baseImage.height * 1) : 0"
+                :max="baseImage ? Math.ceil(baseImage.height * 2) : 0" />
             <Number
                 v-model="conf.trimV[1]"
                 block
-                :min="baseImage ? - Math.floor(baseImage.height * 0.5) : 0"
-                :max="baseImage ? Math.ceil(baseImage.height * 1.5) : 0" />
+                :step="baseImage ? Math.ceil(baseImage.height / 20) : 1"
+                :min="baseImage ? - Math.floor(baseImage.height * 1) : 0"
+                :max="baseImage ? Math.ceil(baseImage.height * 2) : 0" />
           </Fieldset>
           <Fieldset v-if="showDetails" :label="`アス比 (${naturalAspect.toFixed(2)})`">
             <Number
                 v-model="conf.targetAspect"
                 block
-                :step="0.05"
-                :min="Math.min(0.2, naturalAspect)"
-                :max="Math.max(5, naturalAspect)" />
+                :step="0.2"
+                :min="Math.min(0.01, naturalAspect)"
+                :max="Math.max(10, naturalAspect)" />
           </Fieldset>
           <EffectBlock v-model="conf.staticEffects" :effects="staticeffects" />
           <Fieldset v-if="!showDetails" label="速度 (アニメ)">
@@ -365,7 +369,7 @@ export default defineComponent({
                 v-model="conf.duration"
                 block
                 :min="0.1"
-                :step="0.1"
+                :step="0.05"
                 :max="4.0" />
           </Fieldset>
           <Fieldset v-if="showDetails" label="イージング (アニメ)">
