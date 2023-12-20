@@ -5,6 +5,7 @@ import FontSelectBlock from "../formblocks/FontSelectBlock.vue";
 import FontColorSelectBlock from "../formblocks/FontColorSelectBlock.vue";
 import OutlineBlock from "../formblocks/OutlineBlock.vue";
 import Checkbox from "../inputs/Checkbox.vue";
+import NumberInput from "../inputs/Number.vue";
 import Textarea from "../inputs/Textarea.vue";
 import ToggleButton from "../inputs/ToggleButton.vue";
 import Fieldset from "../inputs/Fieldset.vue";
@@ -31,6 +32,7 @@ export default defineComponent({
     Fieldset,
     Checkbox,
     Textarea,
+    Number: NumberInput,
     Grid,
     GridItem,
     Space,
@@ -43,7 +45,7 @@ export default defineComponent({
   },
   props: {
     show: { type: Boolean, required: true },
-    emojiSize: { type: Number, default: null },
+    emojiSize: { type: Number, default: 256 },
   },
   emits: [
     "render",

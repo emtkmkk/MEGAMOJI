@@ -322,7 +322,12 @@ export default defineComponent({
               @update:model-value="refreshDefaultSettings" />
           <Fieldset v-if="showDetails" :label="`トリミング (横) (${baseImage.width})`">
             <Number
-                v-model="conf.trimH"
+                v-model="conf.trimH[0]"
+                block
+                :min="baseImage ? - Math.floor(baseImage.width * 0.5) : 0"
+                :max="baseImage ? Math.ceil(baseImage.width * 1.5) : 0" />
+            <Number
+                v-model="conf.trimH[1]"
                 block
                 :min="baseImage ? - Math.floor(baseImage.width * 0.5) : 0"
                 :max="baseImage ? Math.ceil(baseImage.width * 1.5) : 0" />
@@ -333,8 +338,13 @@ export default defineComponent({
                 block
                 :min="baseImage ? - Math.floor(baseImage.height * 0.5) : 0"
                 :max="baseImage ? Math.ceil(baseImage.height * 1.5) : 0" />
+            <Number
+                v-model="conf.trimV[1]"
+                block
+                :min="baseImage ? - Math.floor(baseImage.height * 0.5) : 0"
+                :max="baseImage ? Math.ceil(baseImage.height * 1.5) : 0" />
           </Fieldset>
-          <Fieldset v-if="showDetails" :label="`アス比 (${naturalAspect})`">
+          <Fieldset v-if="showDetails" :label="`アス比 (${naturalAspect.toFixed(2)})`">
             <Number
                 v-model="conf.targetAspect"
                 block

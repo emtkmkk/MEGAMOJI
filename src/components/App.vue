@@ -44,7 +44,7 @@ export default defineComponent({
       name: null as (string | null),
       resultImages: [[]] as Blob[][],
       previewMode: false,
-      emojiSize: null as (number | null),
+      emojiSize: 256 as (number | null),
       /* ui */
       ui: {
         mode: "text",

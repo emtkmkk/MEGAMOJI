@@ -17,7 +17,7 @@ export default defineComponent({
   },
   props: {
     show: { type: Boolean, required: true },
-    emojiSize: { type: Number, default: null },
+    emojiSize: { type: Number, default: 256 },
   },
   emits: [
     "render",
