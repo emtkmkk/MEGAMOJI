@@ -205,7 +205,7 @@ export const table:{[key: string]: string} = {
 
 export function jaToRoomaji(str: string): string {
   // ひらがなかカタカナだけでなければ終了
-  if (!/^[ぁ-んァ-ンー\s]+$/.test(_tr)) {
+  if (!/^[ぁ-んァ-ンー\s]+$/.test(str)) {
     return str;
   }
 
