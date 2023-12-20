@@ -78,7 +78,16 @@ export const makeTextImage = (
   const paddingPixels = Math.round(padding * fontHeight);
 
   const images = text.split("\n").map((line) => (
-    makeTextImageSingleLine(line, color, font, fontHeight, outlineColors, gradient, gradientX, gradientY)
+    makeTextImageSingleLine(
+      line,
+      color,
+      font,
+      fontHeight,
+      outlineColors,
+      gradient,
+      gradientX,
+      gradientY
+    )
   ));
   const lineWidths = images.map((canvas) => canvas.width);
   const maxWidth = Math.max.apply(null, lineWidths);

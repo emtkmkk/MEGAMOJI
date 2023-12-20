@@ -33,6 +33,7 @@ export default defineComponent({
     Fieldset,
     Checkbox,
     Textarea,
+    Input,
     Number: NumberInput,
     Grid,
     GridItem,

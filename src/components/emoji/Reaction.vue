@@ -17,8 +17,8 @@ export default defineComponent({
 <style scoped>
 .reaction {
   display: inline-block;
-  margin: 6px 0px 0px;
   max-width: 90%;
+  margin: 6px 0 0;
   padding: 4px;
   cursor: pointer;
   background-color: rgba(128, 128, 128, 0.2);
@@ -33,8 +33,8 @@ export default defineComponent({
 
 .reaction_icon {
   display: inline-block;
-  height: 1.6em;
   max-width: 90%;
+  height: 1.6em;
   padding: 4px;
   background-repeat: no-repeat;
   background-position: center;

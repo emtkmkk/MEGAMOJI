@@ -59,8 +59,8 @@ export default defineComponent({
           :gradientX="gradientX"
           :gradientY="gradientY"
           :base-color="modelValue"
-          @update:model-value="$emit('update:gradient', $event)" />
-          @update:gradientX="$emit('update:gradientX', $event)" />
+          @update:model-value="$emit('update:gradient', $event)"
+          @update:gradientX="$emit('update:gradientX', $event)"
           @update:gradientY="$emit('update:gradientY', $event)" />
     </Space>
   </Fieldset>

@@ -8,7 +8,7 @@ import { ColorStop } from "../../types";
 
 export default defineComponent({
   components: {
-    Checkbox, Gradient, Space,Number: NumberInput,
+    Checkbox, Gradient, Space, Number: NumberInput,
   },
   props: {
     modelValue: { type: Array as PropType<ColorStop[]>, required: true },
@@ -18,7 +18,7 @@ export default defineComponent({
     showDetails: { type: Boolean, required: true },
   },
   emits: [
-    "update:modelValue", "update:gradientX", "update:gradientY"
+    "update:modelValue", "update:gradientX", "update:gradientY",
   ],
   methods: {
     initializeGradient(): void {
@@ -69,14 +69,14 @@ export default defineComponent({
     <div>
       <Number
           :model-value="gradientX"
-          @update:model-value="$emit('update:gradientX', $event)" />
+          @update:model-value="$emit('update:gradientX', $event)"
           block
           :min="-100"
           :max="100"
           :step="1" />
       <Number
           :model-value="gradientY"
-          @update:model-value="$emit('update:gradientY', $event)" />
+          @update:model-value="$emit('update:gradientY', $event)"
           block
           :min="-100"
           :max="100"
