@@ -313,7 +313,7 @@ export default defineComponent({
             <Checkbox
                 v-model="conf.noCrop"
                 name="余白を切らない">
-                {{ "余白を切らない" }}
+              {{ "余白を切らない" }}
             </Checkbox>
           </Fieldset>
           <CellcountBlock
