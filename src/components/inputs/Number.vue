@@ -12,6 +12,7 @@ export default defineComponent({
     block: { type: Boolean, default: false },
     min: { type: Number, default: 0 },
     max: { type: Number, default: Infinity },
+    step: { type: Number, default: 1 }
   },
   emits: [
     "update:modelValue",
@@ -33,7 +34,7 @@ export default defineComponent({
       const number = Number(value);
       this.stringValue = value;
       this.stringIsValid = value !== ""
-                        && Number.isInteger(number)
+                        && ((!Number.isInteger(props.step) || Number.isInteger(number)) && (Number.isInteger(props.step) || Number.isFinite(number)))
                         && this.min <= number
                         && number <= this.max;
       if (this.stringIsValid) {
@@ -52,10 +53,10 @@ export default defineComponent({
         :value="stringValue"
         @input="onChange($event.target.value)">
     <div class="buttons">
-      <button class="button" @click="onChange(modelValue - 1)">
+      <button class="button" @click="onChange(modelValue - step)">
         <Decrement />
       </button>
-      <button class="button" @click="onChange(modelValue + 1)">
+      <button class="button" @click="onChange(modelValue + step)">
         <Increment />
       </button>
     </div>
