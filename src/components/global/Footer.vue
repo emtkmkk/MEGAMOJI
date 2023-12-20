@@ -19,25 +19,6 @@ export default defineComponent({
 
 <template>
   <footer class="footer">
-    <p class="p">
-      Built with ♡ by zk-phi
-      <Button type="text" @click="donation">
-        <template #icon>
-          💝
-        </template>
-        投げ銭箱
-      </Button>
-      /
-      <Button type="text" @click="backstage">
-        <template #icon>
-          🛠
-        </template>
-        開発室
-      </Button>
-    </p>
-    <p class="p">
-      このページでは Cookie (アクセス数などの集計に Google Analytics、エラーの検知に Rollbar) を使用しています。
-    </p>
     <p class="p footnote">
       Peace, Love, Unity, Respect 🫶
     </p>
