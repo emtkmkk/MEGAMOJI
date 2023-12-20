@@ -67,6 +67,7 @@ export default defineComponent({
         /* advanced */
         lineSpacing: 0,
         padding: 0,
+        letterSpacing: 0,
         filename: "",
       },
       showDetails: true,
@@ -126,6 +127,7 @@ export default defineComponent({
           Number(this.conf.padding),
           this.conf.gradientX,
           this.conf.gradientY,
+          Number(this.conf.letterSpacing) || undefined,
         );
         const name = this.conf.filename?.replace(/\n/g, "") || this.conf.content.replace(/\n/g, "");
         this.$emit("render", canvas, name);
@@ -190,6 +192,14 @@ export default defineComponent({
             </Space>
           </Fieldset>
           <Input v-model="conf.fileName" name="ファイル名" block />
+          <Fieldset v-if="showDetails" label="字間 (文字分)">
+            <Number
+                v-model="conf.letterSpacing"
+                block
+                :min="-3"
+                :max="3"
+                :step="0.01" />
+          </Fieldset>
           <Fieldset v-if="showDetails" label="行間 (文字分)">
             <Number
                 v-model="conf.lineSpacing"

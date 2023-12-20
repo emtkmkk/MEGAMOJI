@@ -12,10 +12,12 @@ const makeTextImageSingleLine = (
   gradient: GradientColorStop[],
   gradientX?: number,
   gradientY?: number,
+  letterSpacing?: number,
 ): HTMLCanvasElement => {
   const canvas = document.createElement("canvas");
   canvas.width = fontHeight * (line.length || 1) * 2;
   canvas.height = fontHeight * 2;
+  canvas.style.letterSpacing = letterSpacing ? Math.round(letterSpacing * fontHeight) + "px" : "";
 
   const ctx = canvas.getContext("2d");
   if (!ctx) {
@@ -73,6 +75,7 @@ export const makeTextImage = (
   padding: number,
   gradientX?: number,
   gradientY?: number,
+  letterSpacing?: number,
 ): HTMLCanvasElement => {
   const lineSpacingPixels = Math.round(lineSpacing * fontHeight);
   const paddingPixels = Math.round(padding * fontHeight);
@@ -87,6 +90,7 @@ export const makeTextImage = (
       gradient,
       gradientX,
       gradientY,
+      letterSpacing,
     )
   ));
   const lineWidths = images.map((canvas) => canvas.width);
