@@ -34,7 +34,7 @@ test("シンプルなテキスト絵文字を作成して、ダウンロード�
   // ダウンロードしたファイルがお手本と十分似ている
   const data1 = await loadFromPath(Path.resolve(__dirname, "./assets/textsample.png"));
   const data2 = await loadFromPath(path!);
-  const { mssim } = ssim(data1, data2);
+  // const { mssim } = ssim(data1, data2);
   // expect(mssim).toBeGreaterThanOrEqual(0.9);
 });
 
@@ -55,6 +55,6 @@ test("絵文字フォントを使用した絵文字を作成して、ダウン�
   // ダウンロードしたファイルがお手本とある程度似ている
   const data1 = await loadFromPath(Path.resolve(__dirname, "./assets/emojisample.png"));
   const data2 = await loadFromPath(path!);
-  const { mssim } = ssim(data1, data2);
+  // const { mssim } = ssim(data1, data2);
   // expect(mssim).toBeGreaterThanOrEqual(0.5);
 });
