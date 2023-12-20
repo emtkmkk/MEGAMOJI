@@ -204,7 +204,6 @@ export const table = {
 };
 
 export function jaToRoomaji(str: string): string {
-
   // ひらがなかカタカナだけでなければ終了
   if (!/^[ぁ-んァ-ンー\s]+$/.test(_tr)) {
     return str;
@@ -213,12 +212,11 @@ export function jaToRoomaji(str: string): string {
   const hiraStr = kanaToHira(str);
 
   return hiraToRoma(hiraStr);
-
 }
 
 function kanaToHira(str: string): string {
   return str.replace(/[ァ-ン]/g, (match) => {
-    let chr = match.charCodeAt(0) - 0x60;
+    const chr = match.charCodeAt(0) - 0x60;
     return String.fromCharCode(chr);
   });
 }
