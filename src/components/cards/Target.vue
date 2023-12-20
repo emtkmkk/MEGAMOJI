@@ -334,7 +334,7 @@ export default defineComponent({
           </Fieldset>
           <Fieldset v-if="showDetails" :label="`トリミング (縦) (${baseImage.height})`">
             <Number
-                v-model="conf.trimV"
+                v-model="conf.trimV[0]"
                 block
                 :min="baseImage ? - Math.floor(baseImage.height * 0.5) : 0"
                 :max="baseImage ? Math.ceil(baseImage.height * 1.5) : 0" />
