@@ -67,7 +67,6 @@ export default defineComponent({
     Fieldset,
     Space,
     Select,
-    Slider,
     DevTool,
   },
   props: {
@@ -311,11 +310,11 @@ export default defineComponent({
                 @update:model-value="refreshDefaultSettings" />
           </Fieldset>
           <Fieldset label="余白">
-          <Checkbox
-              v-model="conf.noCrop"
-              name="余白を切らない" >
-              {{ "余白を切らない" }}
-          </Checkbox>
+            <Checkbox
+                v-model="conf.noCrop"
+                name="余白を切らない">
+                {{ "余白を切らない" }}
+            </Checkbox>
           </Fieldset>
           <CellcountBlock
               v-if="showDetails"

@@ -29,7 +29,6 @@ export default defineComponent({
     FontColorSelectBlock,
     OutlineBlock,
     Fieldset,
-    Slider,
     Checkbox,
     Textarea,
     Grid,

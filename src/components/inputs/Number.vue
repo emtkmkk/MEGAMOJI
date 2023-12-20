@@ -35,7 +35,7 @@ export default defineComponent({
       this.stringValue = value;
       this.stringIsValid = value !== ""
                         && (
-                          (!Number.isInteger(this.step) || Number.isInteger(number)) 
+                          (!Number.isInteger(this.step) || Number.isInteger(number))
                           && (Number.isInteger(this.step) || Number.isFinite(number))
                         )
                         && this.min <= number
