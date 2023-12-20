@@ -68,6 +68,7 @@ export default defineComponent({
         @update:model-value="$emit('update:modelValue', $event)" />
     <div>
       <Number
+          v-if="showDetails && modelValue.length > 0"
           :model-value="gradientX"
           block
           :min="-100"
@@ -75,6 +76,7 @@ export default defineComponent({
           :step="1"
           @update:model-value="$emit('update:gradientX', $event)" />
       <Number
+          v-if="showDetails && modelValue.length > 0"
           :model-value="gradientY"
           block
           :min="-100"
