@@ -124,6 +124,8 @@ export default defineComponent({
           this.absoluteOutlines,
           this.absoluteGradient,
           Number(this.conf.padding),
+          this.conf.gradientX,
+          this.conf.gradientY,
         );
         const name = this.conf.filename?.replace(/\n/g, "") || this.conf.content.replace(/\n/g, "");
         this.$emit("render", canvas, name);
@@ -187,7 +189,7 @@ export default defineComponent({
               </Space>
             </Space>
           </Fieldset>
-          <Input v-model="conf.fileName" name="ファイル名" block :error="!stringIsValid" />
+          <Input v-model="conf.fileName" name="ファイル名" block/>
           <Fieldset v-if="showDetails" label="行間 (文字分)">
             <Number
                 v-model="conf.lineSpacing"
