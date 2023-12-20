@@ -74,7 +74,7 @@ export default defineComponent({
   props: {
     baseImage: { type: Object as PropType<HTMLImageElement | HTMLCanvasElement>, default: null },
     show: { type: Boolean, required: true },
-    emojiSize: { type: Number, default: null },
+    emojiSize: { type: Number, default: 256 },
   },
   emits: [
     "render",
@@ -109,9 +109,9 @@ export default defineComponent({
         easing: easings[0],
         duration: SPEED_OPTIONS[2].value,
         backgroundColor: "#ffffff",
-        transparent: false,
+        transparent: true,
       },
-      showDetails: false,
+      showDetails: true,
       devMode: false,
       /* internals */
       running: false,
@@ -338,7 +338,7 @@ export default defineComponent({
                 v-model="conf.targetAspect"
                 block
                 nonzero
-                :step="0.01"
+                :step="0.05"
                 :marks="[1, naturalAspect]"
                 :min="Math.min(0.2, naturalAspect)"
                 :max="Math.max(5, naturalAspect)" />
@@ -357,7 +357,7 @@ export default defineComponent({
                 block
                 :min="0.1"
                 :step="0.1"
-                :max="2.0" />
+                :max="4.0" />
           </Fieldset>
           <Fieldset v-if="showDetails" label="イージング (アニメ)">
             <Select v-model="conf.easing" name="イージング" :options="easings" />
