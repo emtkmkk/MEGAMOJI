@@ -27,6 +27,7 @@ const makeTextImageSingleLine = (
   ctx.font = font.replace(/([0-9.]+)em/, (_, emHeight) => `${fontHeight * emHeight}px`);
   ctx.textBaseline = "top";
   ctx.lineJoin = "round";
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   ctx.letterSpacing = letterSpacing ? `${Math.round(letterSpacing * fontHeight)}px` : "";
 
