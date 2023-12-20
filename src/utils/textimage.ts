@@ -27,6 +27,7 @@ const makeTextImageSingleLine = (
   ctx.font = font.replace(/([0-9.]+)em/, (_, emHeight) => `${fontHeight * emHeight}px`);
   ctx.textBaseline = "top";
   ctx.lineJoin = "round";
+  ctx.letterSpacing = letterSpacing ? `${Math.round(letterSpacing * fontHeight)}px` : "";
 
   const margin = fontHeight * 0.025;
 
