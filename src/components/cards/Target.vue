@@ -315,31 +315,25 @@ export default defineComponent({
               v-if="showDetails"
               v-model="conf.cells"
               @update:model-value="refreshDefaultSettings" />
-          <Fieldset v-if="showDetails" label="トリミング (横)">
-            <Slider
+          <Fieldset v-if="showDetails" :label="`トリミング (横) (${baseImage.width})`">
+            <Number
                 v-model="conf.trimH"
                 block
-                nonzero
-                :marks="[0, baseImage.width]"
                 :min="baseImage ? - Math.floor(baseImage.width * 0.5) : 0"
                 :max="baseImage ? Math.ceil(baseImage.width * 1.5) : 0" />
           </Fieldset>
-          <Fieldset v-if="showDetails" label="トリミング (縦)">
-            <Slider
+          <Fieldset v-if="showDetails" :label="`トリミング (縦) (${baseImage.height})`">
+            <Number
                 v-model="conf.trimV"
                 block
-                nonzero
-                :marks="[0, baseImage.height]"
                 :min="baseImage ? - Math.floor(baseImage.height * 0.5) : 0"
                 :max="baseImage ? Math.ceil(baseImage.height * 1.5) : 0" />
           </Fieldset>
-          <Fieldset v-if="showDetails" label="アス比">
-            <Slider
+          <Fieldset v-if="showDetails" :label="`アス比 (${naturalAspect})`">
+            <Number
                 v-model="conf.targetAspect"
                 block
-                nonzero
                 :step="0.05"
-                :marks="[1, naturalAspect]"
                 :min="Math.min(0.2, naturalAspect)"
                 :max="Math.max(5, naturalAspect)" />
           </Fieldset>
@@ -352,7 +346,7 @@ export default defineComponent({
                 @update:model-value="selectSpeed($event)" />
           </Fieldset>
           <Fieldset v-if="showDetails" label="長さ (アニメ)">
-            <Slider
+            <Number
                 v-model="conf.duration"
                 block
                 :min="0.1"
