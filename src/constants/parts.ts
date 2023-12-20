@@ -27,6 +27,8 @@ import base1f383 from "../parts/base/1f383.svg";
 
 import base1f4a9 from "../parts/base/1f4a9.svg";
 
+import base1f4f4 from "../parts/base/1f4f4.svg";
+
 // NG
 // import base1f425 from '../parts/base/1f425.svg';
 // import base1f98d from '../parts/base/1f98d.svg';
@@ -166,6 +168,8 @@ import eyes1f635 from "../parts/eyes/1f635.svg";
 import eyes1f62d from "../parts/eyes/1f62d.svg";
 import eyes1f9d0 from "../parts/eyes/1f9d0.svg";
 
+import eyes1f4f4 from "../parts/eyes/1f4f4.svg";
+
 // duplicated
 // import eyes1f615 from '../parts/eyes/1f615.svg';
 // import eyes1f626 from '../parts/eyes/1f626.svg';
@@ -281,6 +285,8 @@ import mouth1f92c from "../parts/mouths/1f92c.svg";
 import mouth1f92d from "../parts/mouths/1f92d.svg";
 import mouth1f973 from "../parts/mouths/1f973.svg";
 
+import mouth1f4f4 from "../parts/mouths/1f4f4.svg";
+
 // NG
 // import mouth1f4a9 from '../parts/mouths/1f4a9.svg';
 
@@ -363,6 +369,8 @@ import other1f970 from "../parts/others/1f970.svg";
 import other1f973 from "../parts/others/1f973.svg";
 import other1f976 from "../parts/others/1f976.svg";
 
+import other1f4f4 from "../parts/others/1f4f4.svg";
+
 // duplicated
 // import other1f630 from '../parts/others/1f630.svg';
 
@@ -397,6 +405,7 @@ export const base = [
   base1f345,
   base1f383,
   base1f4a9,
+  base1f4f4,
 ];
 
 export const eyes = [
@@ -498,6 +507,7 @@ export const eyes = [
   eyes1f635,
   eyes1f62d,
   eyes1f9d0,
+  eyes1f4f4,
 ];
 
 export const mouths = [
@@ -588,6 +598,7 @@ export const mouths = [
   mouth1f92c,
   mouth1f92d,
   mouth1f973,
+  mouth1f4f4,
 ];
 
 export const textures = [
@@ -637,4 +648,5 @@ export const others = [
   other1f970,
   other1f973,
   other1f976,
+  other1f4f4,
 ];
