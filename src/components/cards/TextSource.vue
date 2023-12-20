@@ -61,10 +61,10 @@ export default defineComponent({
         outlines: [] as string[],
         font: fonts[0].fonts[0].value,
         /* advanced */
-        lineSpacing: 0.05,
-        padding: 0.02,
+        lineSpacing: 0,
+        padding: 0,
       },
-      showDetails: false,
+      showDetails: true,
       /* internals */
       running: false,
       dirty: false,
@@ -183,7 +183,7 @@ export default defineComponent({
             </Space>
           </Fieldset>
           <Fieldset v-if="showDetails" label="行間 (文字分)">
-            <Slider
+            <Number
                 v-model="conf.lineSpacing"
                 block
                 :min="0"
@@ -191,7 +191,7 @@ export default defineComponent({
                 :step="0.01" />
           </Fieldset>
           <Fieldset v-if="showDetails" label="パディング (文字分)">
-            <Slider
+            <Number
                 v-model="conf.padding"
                 block
                 :min="0"
