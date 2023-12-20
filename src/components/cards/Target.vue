@@ -7,7 +7,6 @@ import Button from "../inputs/Button.vue";
 import Select from "../inputs/Select.vue";
 import Checkbox from "../inputs/Checkbox.vue";
 import NumberInput from "../inputs/Number.vue";
-import Slider from "../inputs/Slider.vue";
 import Fieldset from "../inputs/Fieldset.vue";
 import Color from "../inputs/Color.vue";
 import Space from "../global/Space.vue";
@@ -312,11 +311,11 @@ export default defineComponent({
                 @update:model-value="refreshDefaultSettings" />
           </Fieldset>
           <Fieldset label="余白">
-            <Checkbox
-                v-model="conf.noCrop"
-                name="余白を切らない"
+          <Checkbox
+              v-model="conf.noCrop"
+              name="余白を切らない" >
               {{ "余白を切らない" }}
-            </Checkbox>
+          </Checkbox>
           </Fieldset>
           <CellcountBlock
               v-if="showDetails"
