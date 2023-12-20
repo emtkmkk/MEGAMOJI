@@ -311,6 +311,13 @@ export default defineComponent({
                 :options="TRIMMING_OPTIONS"
                 @update:model-value="refreshDefaultSettings" />
           </Fieldset>
+          <Fieldset label="余白">
+            <Checkbox
+                v-model="conf.noCrop"
+                name="余白を切らない"
+              {{ "余白を切らない" }}
+            </Checkbox>
+          </Fieldset>
           <CellcountBlock
               v-if="showDetails"
               v-model="conf.cells"
