@@ -56,10 +56,10 @@ export default defineComponent({
         :value="stringValue"
         @input="onChange($event.target.value)">
     <div class="buttons">
-      <button class="button" @click="onChange(Math.round((modelValue - step) * 100) / 100)">
+      <button class="button" @click="onChange(Math.round((modelValue - step) * 1000) / 1000)">
         <Decrement />
       </button>
-      <button class="button" @click="onChange(Math.round((modelValue + step) * 100) / 100)">
+      <button class="button" @click="onChange(Math.round((modelValue + step) * 1000) / 1000)">
         <Increment />
       </button>
     </div>

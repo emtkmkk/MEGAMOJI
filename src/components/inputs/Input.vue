@@ -8,6 +8,7 @@ export default defineComponent({
     block: { type: Boolean, default: false },
     small: { type: Boolean, default: false },
     error: { type: Boolean, default: false },
+    placeholder: { type: String, default: "" },
   },
   emits: [
     "update:modelValue",
@@ -21,6 +22,7 @@ export default defineComponent({
       :name="name"
       :class="['input', { block, error, small }]"
       :value="modelValue"
+      :placeholder="placeholder"
       @input="$emit('update:modelValue', $event.target.value)">
 </template>
 

@@ -88,6 +88,10 @@ export default defineComponent({
         pos: cs.pos,
       }));
     },
+    currentFilename(): string {
+      return this.conf.filename?.replace(/\n/g, "") ||
+        jaToRoomaji(this.conf.content).replace(/\n/g, "")
+    },
   },
   watch: {
     conf: {
@@ -107,9 +111,6 @@ export default defineComponent({
     Analytics.changeFont(this.conf.font);
   },
   methods: {
-    roomaji(str: string): string {
-      return jaToRoomaji(str);
-    },
     render(dirty?: boolean): void {
       if (dirty) {
         this.dirty = true;
@@ -197,14 +198,8 @@ export default defineComponent({
               </Space>
             </Space>
           </Fieldset>
-          <Fieldset v-if="showDetails" label="出力ファイル名">
-            <div v-if="!showDetails || !conf.filename">
-              {{
-                conf.filename?.replace(/\n/g, "") ||
-                  roomaji(conf.content).replace(/\n/g, "")
-              }}
-            </div>
-            <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" block />
+          <Fieldset :label="`${!showDetails ? `${currentFilename}.png` : '出力ファイル名'}`">
+            <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" :placeholder="currentFilename" block />
           </Fieldset>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
             <Number

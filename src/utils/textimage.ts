@@ -51,7 +51,7 @@ const makeTextImageSingleLine = (
       ? (fontHeight * (line.length || 1) + marginPx * 2) * gradientPos[2] / 100
       : 0;
     const y1 = gradientPos?.[3]
-      ? (fontHeight + marginPx * 2) * gradientPos[3]
+      ? (fontHeight + marginPx * 2) * gradientPos[3] / 100
       : 0;
     if (gradientMarker) {
       ctx.fillStyle = "red";

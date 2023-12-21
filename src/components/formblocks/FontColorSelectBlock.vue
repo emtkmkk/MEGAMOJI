@@ -63,6 +63,7 @@ export default defineComponent({
           :gradient-sy="gradientSy"
           :gradient-ex="gradientEx"
           :gradient-ey="gradientEy"
+          :gradient-marker="gradientMarker"
           :base-color="modelValue"
           @update:model-value="$emit('update:gradient', $event)"
           @update:gradientSx="$emit('update:gradientSx', $event)"
