@@ -247,8 +247,7 @@ export function hiraToRoma(str: string): string {
 
 function toHalfWidth(str: string): string {
   // 全角英数字を半角に変換
-  str = str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => {
-    return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
-  });
-  return str;
+  const replaceStr = str.replace(/[Ａ-Ｚａ-ｚ０-９]/g,
+    (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
+  return replaceStr;
 }
