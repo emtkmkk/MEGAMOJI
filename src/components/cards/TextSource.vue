@@ -201,7 +201,7 @@ export default defineComponent({
           </Fieldset>
           <Fieldset
               v-if="showDetails || currentFilename"
-              :label="`${!showDetails ? currentFilename : '出力ファイル名'}`" >
+              :label="`${!showDetails ? currentFilename : '出力ファイル名'}`">
             <Input
                 v-if="showDetails"
                 v-model="conf.filename"
