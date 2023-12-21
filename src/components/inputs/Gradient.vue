@@ -4,7 +4,7 @@ import { ColorStop } from "../../types";
 import ColorPopover from "./ColorPopover.vue";
 import Button from "./Button.vue";
 import Delete from "../icons/Delete.vue";
-import NumberInput from "../inputs/Number.vue";
+import NumberInput from "./Number.vue";
 import { absColor } from "../../utils/color";
 import { nearestIndex } from "../../utils/array";
 

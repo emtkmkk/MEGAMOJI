@@ -23,7 +23,7 @@ export default defineComponent({
     gradientMarker: { type: Boolean, required: true },
   },
   emits: [
-    "update:modelValue", "update:gradient", "update:gradientSx", "update:gradientSy", "update:gradientEx", "update:gradientEy",
+    "update:modelValue", "update:gradient", "update:gradientSx", "update:gradientSy", "update:gradientEx", "update:gradientEy", "update:gradientMarker",
   ],
   data() {
     return {

@@ -21,7 +21,7 @@ export default defineComponent({
     showDetails: { type: Boolean, required: true },
   },
   emits: [
-    "update:modelValue", "update:gradientSx", "update:gradientSy", "update:gradientEx", "update:gradientEy", "update:gradientMarker"
+    "update:modelValue", "update:gradientSx", "update:gradientSy", "update:gradientEx", "update:gradientEy", "update:gradientMarker",
   ],
   methods: {
     initializeGradient(): void {

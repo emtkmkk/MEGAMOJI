@@ -42,7 +42,7 @@ const makeTextImageSingleLine = (
 
   if (gradient.length) {
     const x0 = gradientPos?.[0]
-      ? (fontHeight * (line.length || 1)  + marginPx * 2) * gradientPos[0] / 100
+      ? (fontHeight * (line.length || 1) + marginPx * 2) * gradientPos[0] / 100
       : 0;
     const y0 = gradientPos?.[1]
       ? (fontHeight + marginPx * 2) * gradientPos[1] / 100

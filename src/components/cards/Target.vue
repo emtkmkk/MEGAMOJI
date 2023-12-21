@@ -348,7 +348,7 @@ export default defineComponent({
                 :min="baseImage ? - Math.floor(baseImage.height * 1) : 0"
                 :max="baseImage ? Math.ceil(baseImage.height * 2) : 0" />
           </Fieldset>
-          <Fieldset :label="`${showDetails ? "アス比" : "横の長さ"} (${naturalAspect.toFixed(2)})`">
+          <Fieldset :label="`${showDetails ? 'アス比' : '横の長さ'} (${naturalAspect.toFixed(2)})`">
             <Number
                 v-model="conf.targetAspect"
                 block

@@ -62,7 +62,7 @@ export default defineComponent({
         color: "#ffda00",
         gradient: [] as ColorStop[],
         outlines: [] as string[],
-        gradientPos: [0,0,0,100],
+        gradientPos: [0, 0, 0, 100],
         gradientMarker: false,
         font: fonts[0].fonts[0].value,
         /* advanced */
@@ -195,7 +195,9 @@ export default defineComponent({
             </Space>
           </Fieldset>
           <Fieldset v-if="showDetails" label="出力ファイル名">
-            <span v-if="!showDetails || !conf.filename">{{ conf.filename?.replace(/\n/g, "") || jaToRoomaji(conf.content).replace(/\n/g, "") }}</span>
+            <div v-if="!showDetails || !conf.filename">
+              {{ conf.filename?.replace(/\n/g, "") || jaToRoomaji(conf.content).replace(/\n/g, "") }}
+            </div>
             <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" block />
           </Fieldset>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
