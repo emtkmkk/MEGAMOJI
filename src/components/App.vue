@@ -43,7 +43,7 @@ export default defineComponent({
       baseImage: null as (HTMLImageElement | HTMLCanvasElement | null),
       name: null as (string | null),
       resultImages: [[]] as Blob[][],
-      previewMode: false,
+      previewMode: true,
       emojiSize: 256 as (number | null),
       /* ui */
       ui: {

@@ -109,7 +109,7 @@ export default defineComponent({
         backgroundColor: "#ffffff",
         transparent: true,
       },
-      showDetails: true,
+      showDetails: false,
       devMode: false,
       /* internals */
       running: false,
@@ -309,7 +309,7 @@ export default defineComponent({
                 :options="TRIMMING_OPTIONS"
                 @update:model-value="refreshDefaultSettings" />
           </Fieldset>
-          <Fieldset label="余白">
+          <Fieldset v-if="showDetails" label="余白">
             <Checkbox
                 v-model="conf.noCrop"
                 name="余白を切らない">
@@ -348,11 +348,11 @@ export default defineComponent({
                 :min="baseImage ? - Math.floor(baseImage.height * 1) : 0"
                 :max="baseImage ? Math.ceil(baseImage.height * 2) : 0" />
           </Fieldset>
-          <Fieldset v-if="showDetails" :label="`アス比 (${naturalAspect.toFixed(2)})`">
+          <Fieldset :label="`${showDetails ? "アス比" : "横の長さ"} (${naturalAspect.toFixed(2)})`">
             <Number
                 v-model="conf.targetAspect"
                 block
-                :step="0.2"
+                :step="showDetails ? 0.2 : 0.5"
                 :min="Math.min(0.01, naturalAspect)"
                 :max="Math.max(10, naturalAspect)" />
           </Fieldset>
@@ -383,7 +383,7 @@ export default defineComponent({
                   block
                   @update:model-value="conf.transparent = false" />
               <Checkbox v-model="conf.transparent" name="背景色(透過)">
-                {{ "透過 (アニメ gif は非推奨)" }}
+                {{ "透過" }}
               </Checkbox>
             </Space>
           </Fieldset>
@@ -392,7 +392,7 @@ export default defineComponent({
     </Grid>
     <template v-if="!devMode" #footer>
       <Checkbox v-model="showDetails" name="職人モード(効果)">
-        {{ "職人モード" }}
+        {{ "詳細設定を表示" }}
       </Checkbox>
     </template>
     <DevTool

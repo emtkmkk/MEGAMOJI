@@ -34,7 +34,7 @@ export default defineComponent({
 .reaction_icon {
   display: inline-block;
   max-width: 90%;
-  height: 1.6em;
+  height: 1.8em;
   padding: 4px;
   background-repeat: no-repeat;
   background-position: center;

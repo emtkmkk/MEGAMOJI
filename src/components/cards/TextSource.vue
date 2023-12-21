@@ -62,16 +62,17 @@ export default defineComponent({
         color: "#ffda00",
         gradient: [] as ColorStop[],
         outlines: [] as string[],
-        gradientX: 0,
-        gradientY: 0,
+        gradientPos: [0,0,0,100],
+        gradientMarker: false,
         font: fonts[0].fonts[0].value,
         /* advanced */
         lineSpacing: 0,
         padding: 0,
         letterSpacing: 0,
+        margin: 0.025,
         filename: "",
       },
-      showDetails: true,
+      showDetails: false,
       /* internals */
       running: false,
       dirty: false,
@@ -129,6 +130,7 @@ export default defineComponent({
           this.conf.gradientX,
           this.conf.gradientY,
           Number(this.conf.letterSpacing) || undefined,
+          Number(this.conf.margin) || undefined,
         );
         const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.conf.content).replace(/\n/g, "");
         this.$emit("render", canvas, name);
@@ -193,7 +195,8 @@ export default defineComponent({
             </Space>
           </Fieldset>
           <Fieldset v-if="showDetails" label="出力ファイル名">
-            <Input v-model="conf.filename" name="出力ファイル名" block />
+            <span v-if="!showDetails || !conf.filename">{{ conf.filename?.replace(/\n/g, "") || jaToRoomaji(conf.content).replace(/\n/g, "") }}</span>
+            <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" block />
           </Fieldset>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
             <Number
@@ -211,9 +214,17 @@ export default defineComponent({
                 :max="3"
                 :step="0.01" />
           </Fieldset>
-          <Fieldset v-if="showDetails" label="パディング (文字分)">
+          <Fieldset v-if="showDetails" label="全体余白 (文字分)">
             <Number
                 v-model="conf.padding"
+                block
+                :min="-3"
+                :max="3"
+                :step="0.01" />
+          </Fieldset>
+          <Fieldset v-if="showDetails" label="行余白 (文字分)">
+            <Number
+                v-model="conf.margin"
                 block
                 :min="-3"
                 :max="3"
@@ -222,8 +233,11 @@ export default defineComponent({
           <FontColorSelectBlock
               v-model="conf.color"
               v-model:gradient="conf.gradient"
-              v-model:gradientX="conf.gradientX"
-              v-model:gradientY="conf.gradientY"
+              v-model:gradientSx="conf.gradientPos[0]"
+              v-model:gradientSy="conf.gradientPos[1]"
+              v-model:gradientEx="conf.gradientPos[2]"
+              v-model:gradientEy="conf.gradientPos[3]"
+              v-model:gradientMarker="conf.gradientMarker"
               :show-details="showDetails" />
           <OutlineBlock
               v-model="conf.outlines"
@@ -234,7 +248,7 @@ export default defineComponent({
     </Grid>
     <template #footer>
       <Checkbox v-model="showDetails" name="職人モード(テキスト)">
-        {{ "職人モード" }}
+        {{ "詳細設定を表示" }}
       </Checkbox>
     </template>
   </Card>

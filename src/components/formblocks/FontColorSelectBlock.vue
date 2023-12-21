@@ -16,11 +16,14 @@ export default defineComponent({
     modelValue: { type: String, required: true },
     gradient: { type: Array, required: true },
     showDetails: { type: Boolean, required: true },
-    gradientX: { type: Number, required: true },
-    gradientY: { type: Number, required: true },
+    gradientSx: { type: Number, required: true },
+    gradientSy: { type: Number, required: true },
+    gradientEx: { type: Number, required: true },
+    gradientEy: { type: Number, required: true },
+    gradientMarker: { type: Boolean, required: true },
   },
   emits: [
-    "update:modelValue", "update:gradient", "update:gradientX", "update:gradientY",
+    "update:modelValue", "update:gradient", "update:gradientSx", "update:gradientSy", "update:gradientEx", "update:gradientEy",
   ],
   data() {
     return {
@@ -56,12 +59,17 @@ export default defineComponent({
       <GradientBlock
           :show-details="showDetails"
           :model-value="gradient"
-          :gradient-x="gradientX"
-          :gradient-y="gradientY"
+          :gradient-sx="gradientSx"
+          :gradient-sy="gradientSy"
+          :gradient-ex="gradientEx"
+          :gradient-ey="gradientEy"
           :base-color="modelValue"
           @update:model-value="$emit('update:gradient', $event)"
-          @update:gradientX="$emit('update:gradientX', $event)"
-          @update:gradientY="$emit('update:gradientY', $event)" />
+          @update:gradientSx="$emit('update:gradientSx', $event)"
+          @update:gradientSy="$emit('update:gradientSy', $event)"
+          @update:gradientEx="$emit('update:gradientEx', $event)"
+          @update:gradientEy="$emit('update:gradientEy', $event)"
+          @update:gradientMarker="$emit('update:gradientMarker', $event)" />
     </Space>
   </Fieldset>
 </template>

@@ -4,12 +4,13 @@ import { ColorStop } from "../../types";
 import ColorPopover from "./ColorPopover.vue";
 import Button from "./Button.vue";
 import Delete from "../icons/Delete.vue";
+import NumberInput from "../inputs/Number.vue";
 import { absColor } from "../../utils/color";
 import { nearestIndex } from "../../utils/array";
 
 export default defineComponent({
   components: {
-    ColorPopover, Button, Delete,
+    ColorPopover, Button, Delete, Number: NumberInput,
   },
   props: {
     modelValue: { type: Array as PropType<ColorStop[]>, required: true },
@@ -141,6 +142,13 @@ export default defineComponent({
       :on-hide="onHide"
       :model-value="colorPickerTarget != null ? absColorStop[colorPickerTarget].color : ''"
       @update:model-value="updateColor($event)">
+    <Number
+        :model-value="colorPickerTarget != null ? absColorStop[colorPickerTarget].pos : ''"
+        block
+        :min="0"
+        :max="100"
+        :step="1"
+        @update:model-value="updatePos($event)" />
     <Button danger block @click="deleteColorStop">
       <Delete /> 削除
     </Button>

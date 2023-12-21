@@ -10,9 +10,10 @@ const makeTextImageSingleLine = (
   fontHeight: number,
   outlineColors: string[],
   gradient: GradientColorStop[],
-  gradientX?: number,
-  gradientY?: number,
+  gradientPos?: number[],
+  gradientMarker?: boolean,
   letterSpacing?: number,
+  margin?: number,
 ): HTMLCanvasElement => {
   const canvas = document.createElement("canvas");
   canvas.width = fontHeight * (line.length || 1) * 2;
@@ -31,31 +32,33 @@ const makeTextImageSingleLine = (
   // @ts-ignore
   ctx.letterSpacing = letterSpacing ? `${Math.round(letterSpacing * fontHeight)}px` : "";
 
-  const margin = fontHeight * 0.025;
+  const marginPx = fontHeight * (margin ?? 0.025);
 
   for (let i = outlineColors.length - 1; i >= 0; i -= 1) {
     ctx.strokeStyle = outlineColors[i];
     ctx.lineWidth = (i + 1) * 8;
-    ctx.strokeText(line, margin, margin);
+    ctx.strokeText(line, marginPx, marginPx);
   }
 
   if (gradient.length) {
-    const x0 = gradientX && gradientX < 0
-      ? (fontHeight + margin * 2) * -gradientX / 100
+    const x0 = gradientPos?.[0]
+      ? (fontHeight * (line.length || 1)  + marginPx * 2) * gradientPos[0] / 100
       : 0;
-    const y0 = gradientY && gradientY < 0
-      ? (fontHeight + margin * 2) * -gradientY / 100
+    const y0 = gradientPos?.[1]
+      ? (fontHeight + marginPx * 2) * gradientPos[1] / 100
       : 0;
-    const x1 = gradientX && gradientX > 0
-      ? (fontHeight + margin * 2) * gradientX / 100
+    const x1 = gradientPos?.[2]
+      ? (fontHeight * (line.length || 1) + marginPx * 2) * gradientPos[2] / 100
       : 0;
-    const y1 = gradientY && gradientY > 0
-      ? (fontHeight + margin * 2) * ((100 - gradientY) / 100)
-      : fontHeight + margin * 2;
-    ctx.fillStyle = "red";
-    ctx.fillRect(x0, y0, 10, 10);
-    ctx.fillStyle = "blue";
-    ctx.fillRect(x1, y1, 10, 10);
+    const y1 = gradientPos?.[3]
+      ? (fontHeight + marginPx * 2) * gradientPos[3]
+      : 0;
+    if (gradientMarker) {
+      ctx.fillStyle = "red";
+      ctx.fillRect(x0, y0, 16, 16);
+      ctx.fillStyle = "blue";
+      ctx.fillRect(x1, y1, 16, 16);
+    }
     const gradientObj = ctx.createLinearGradient(x0, y0, x1, y1);
     gradient.forEach((colorStop) => {
       gradientObj.addColorStop(colorStop.pos / 100, colorStop.color);
@@ -64,7 +67,7 @@ const makeTextImageSingleLine = (
   } else {
     ctx.fillStyle = color;
   }
-  ctx.fillText(line, margin, margin);
+  ctx.fillText(line, marginPx, marginPx);
 
   return shrinkCanvas(canvas);
 };
@@ -80,9 +83,10 @@ export const makeTextImage = (
   outlineColors: string[],
   gradient: GradientColorStop[],
   padding: number,
-  gradientX?: number,
-  gradientY?: number,
+  gradientPos?: number[],
+  gradientMarker?: boolean,
   letterSpacing?: number,
+  margin?: number,
 ): HTMLCanvasElement => {
   const lineSpacingPixels = Math.round(lineSpacing * fontHeight);
   const paddingPixels = Math.round(padding * fontHeight);
@@ -95,9 +99,10 @@ export const makeTextImage = (
       fontHeight,
       outlineColors,
       gradient,
-      gradientX,
-      gradientY,
+      gradientPos,
+      gradientMarker,
       letterSpacing,
+      margin,
     )
   ));
   const lineWidths = images.map((canvas) => canvas.width);

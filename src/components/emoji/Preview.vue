@@ -16,7 +16,7 @@ export default defineComponent({
 <template>
   <div :class="`preview ${darkMode ? 'dark' : 'light'}`">
     <div>
-      <b>ほげほげさん</b> <small>1:23 AM</small>
+      <b>もこもこさん</b> <small>たった今</small>
     </div>
     <div v-for="(row, i) in images" :key="i" class="row">
       <img
@@ -26,7 +26,33 @@ export default defineComponent({
           :src="col">
     </div>
     <div>
-      ほげほげほげほげほげほげほげほげ。
+      <span v-for="(row, i) in images" :key="i">
+        <img
+            v-for="(col, j) in row"
+            :key="j"
+            class="img in_text"
+            :src="col">
+        <img
+            v-for="(col, j) in row"
+            :key="j"
+            class="img in_text"
+            :src="col">
+        <img
+            v-for="(col, j) in row"
+            :key="j"
+            class="img in_text"
+            :src="col">
+        <img
+            v-for="(col, j) in row"
+            :key="j"
+            class="img in_text"
+            :src="col">
+        <img
+            v-for="(col, j) in row"
+            :key="j"
+            class="img in_text"
+            :src="col">
+      </span>
     </div>
     <div>
       文章中で使うとこんな
@@ -61,8 +87,8 @@ export default defineComponent({
 }
 
 .preview.dark {
-  color: #ddd;
-  background-color: #333;
+  color: #eee;
+  background-color: #222;
 }
 
 .row {
@@ -77,8 +103,8 @@ export default defineComponent({
 }
 
 .large {
-  height: 1.4em;
-  min-height: 1.4em;
+  height: 4.2em;
+  min-height: 4.2em;
   vertical-align: top;
 }
 

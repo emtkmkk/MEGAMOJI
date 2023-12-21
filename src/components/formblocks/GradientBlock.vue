@@ -12,13 +12,16 @@ export default defineComponent({
   },
   props: {
     modelValue: { type: Array as PropType<ColorStop[]>, required: true },
-    gradientX: { type: Array as PropType<ColorStop[]>, required: true },
-    gradientY: { type: Array as PropType<ColorStop[]>, required: true },
+    gradientSx: { type: Number, required: true },
+    gradientSy: { type: Number, required: true },
+    gradientEx: { type: Number, required: true },
+    gradientEy: { type: Number, required: true },
+    gradientMarker: { type: Boolean, required: true },
     baseColor: { type: String, required: true },
     showDetails: { type: Boolean, required: true },
   },
   emits: [
-    "update:modelValue", "update:gradientX", "update:gradientY",
+    "update:modelValue", "update:gradientSx", "update:gradientSy", "update:gradientEx", "update:gradientEy", "update:gradientMarker"
   ],
   methods: {
     initializeGradient(): void {
@@ -34,8 +37,11 @@ export default defineComponent({
         this.initializeGradient();
       } else {
         this.$emit("update:modelValue", []);
-        this.$emit("update:gradientX", 0);
-        this.$emit("update:gradientY", 0);
+        this.$emit("update:gradientSx", 0);
+        this.$emit("update:gradientSy", 0);
+        this.$emit("update:gradientEx", 0);
+        this.$emit("update:gradientEy", 0);
+        this.$emit("update:gradientMarker", false);
       }
     },
     update(ix: number, value: ColorStop): void {
@@ -54,6 +60,11 @@ export default defineComponent({
     },
     clearGradient(): void {
       this.$emit("update:modelValue", []);
+      this.$emit("update:gradientSx", 0);
+      this.$emit("update:gradientSy", 0);
+      this.$emit("update:gradientEx", 0);
+      this.$emit("update:gradientEy", 0);
+      this.$emit("update:gradientMarker", false);
     },
   },
 });
@@ -69,21 +80,45 @@ export default defineComponent({
     <div>
       <Number
           v-if="showDetails && modelValue.length > 0"
-          :model-value="gradientX"
+          :model-value="gradientSx"
           block
-          :min="-100"
-          :max="100"
+          :min="-200"
+          :max="200"
           :step="1"
-          @update:model-value="$emit('update:gradientX', $event)" />
+          @update:model-value="$emit('update:gradientSx', $event)" />
       <Number
           v-if="showDetails && modelValue.length > 0"
-          :model-value="gradientY"
+          :model-value="gradientSy"
           block
-          :min="-100"
-          :max="100"
+          :min="-200"
+          :max="200"
           :step="1"
-          @update:model-value="$emit('update:gradientY', $event)" />
+          @update:model-value="$emit('update:gradientSy', $event)" />
     </div>
+    <div>
+      <Number
+          v-if="showDetails && modelValue.length > 0"
+          :model-value="gradientEx"
+          block
+          :min="-200"
+          :max="200"
+          :step="1"
+          @update:model-value="$emit('update:gradientEx', $event)" />
+      <Number
+          v-if="showDetails && modelValue.length > 0"
+          :model-value="gradientEy"
+          block
+          :min="-200"
+          :max="200"
+          :step="1"
+          @update:model-value="$emit('update:gradientEy', $event)" />
+    </div>
+    <Checkbox
+        name="マーカー表示"
+        :model-value="gradientMarker"
+        @update:model-value="$emit('update:gradientMarker', $event)">
+      {{ "マーカー表示" }}
+    </Checkbox>
     <Checkbox
         name="グラデーション"
         :model-value="modelValue.length > 0"
