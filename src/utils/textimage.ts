@@ -52,6 +52,10 @@ const makeTextImageSingleLine = (
     const y1 = gradientY && gradientY > 0
       ? (fontHeight + margin * 2) * ((100 - gradientY) / 100)
       : fontHeight + margin * 2;
+    ctx.fillStyle = "red";
+    ctx.fillRect(x0, y0, 10, 10);
+    ctx.fillStyle = "blue";
+    ctx.fillRect(x1, y1, 10, 10);
     const gradientObj = ctx.createLinearGradient(x0, y0, x1, y1);
     gradient.forEach((colorStop) => {
       gradientObj.addColorStop(colorStop.pos / 100, colorStop.color);
