@@ -109,7 +109,7 @@ export default defineComponent({
   methods: {
     roomaji(str: string): string {
       return jaToRoomaji(str);
-    }
+    },
     render(dirty?: boolean): void {
       if (dirty) {
         this.dirty = true;
