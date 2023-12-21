@@ -127,8 +127,8 @@ export default defineComponent({
           this.absoluteOutlines,
           this.absoluteGradient,
           Number(this.conf.padding),
-          this.conf.gradientX,
-          this.conf.gradientY,
+          this.conf.gradientPos,
+          this.conf.gradientMarker,
           Number(this.conf.letterSpacing) || undefined,
           Number(this.conf.margin) || undefined,
         );
@@ -196,7 +196,10 @@ export default defineComponent({
           </Fieldset>
           <Fieldset v-if="showDetails" label="出力ファイル名">
             <div v-if="!showDetails || !conf.filename">
-              {{ conf.filename?.replace(/\n/g, "") || jaToRoomaji(conf.content).replace(/\n/g, "") }}
+              {{ 
+                conf.filename?.replace(/\n/g, "") ||
+                jaToRoomaji(conf.content).replace(/\n/g, "") 
+              }}
             </div>
             <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" block />
           </Fieldset>
