@@ -89,8 +89,8 @@ export default defineComponent({
       }));
     },
     currentFilename(): string {
-      return this.conf.filename?.replace(/\n/g, "") ||
-        jaToRoomaji(this.conf.content).replace(/\n/g, "")
+      return this.conf.filename?.replace(/\n/g, "") 
+        || jaToRoomaji(this.conf.content).replace(/\n/g, "");
     },
   },
   watch: {
@@ -199,7 +199,13 @@ export default defineComponent({
             </Space>
           </Fieldset>
           <Fieldset :label="`${!showDetails ? `${currentFilename}.png` : '出力ファイル名'}`">
-            <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" :placeholder="currentFilename" block />
+            <Input
+              v-if="showDetails"
+              v-model="conf.filename"
+              name="出力ファイル名"
+              :placeholder="currentFilename"
+              block
+            />
           </Fieldset>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
             <Number
