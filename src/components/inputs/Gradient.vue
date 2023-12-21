@@ -59,6 +59,13 @@ export default defineComponent({
       })));
       (this.$refs.popover as ColorPopover).refreshStyle();
     },
+    updatePosPicker(newPos: number): void {
+      this.$emit("update:modelValue", this.modelValue.map((colorStop, ix) => ({
+        pos: ix === this.colorPickerTarget ? newPos : colorStop.pos,
+        color: colorStop.color,
+      })));
+      (this.$refs.popover as ColorPopover).refreshStyle();
+    },
     updateColor(newColor: string): void {
       this.$emit("update:modelValue", this.modelValue.map((colorStop, ix) => ({
         pos: colorStop.pos,
@@ -148,7 +155,7 @@ export default defineComponent({
         :min="0"
         :max="100"
         :step="1"
-        @update:model-value="updatePos($event)" />
+        @update:model-value="updatePosPicker($event)" />
     <Button danger block @click="deleteColorStop">
       <Delete /> 削除
     </Button>
