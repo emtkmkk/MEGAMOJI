@@ -196,9 +196,9 @@ export default defineComponent({
           </Fieldset>
           <Fieldset v-if="showDetails" label="出力ファイル名">
             <div v-if="!showDetails || !conf.filename">
-              {{ 
+              {{
                 conf.filename?.replace(/\n/g, "") ||
-                jaToRoomaji(conf.content).replace(/\n/g, "") 
+                  jaToRoomaji(conf.content).replace(/\n/g, "")
               }}
             </div>
             <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" block />
