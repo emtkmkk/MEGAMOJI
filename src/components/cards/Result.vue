@@ -51,7 +51,7 @@ export default defineComponent({
   <Space vertical large>
     <Card class="result" title="プレビュー">
       <Space vertical large>
-        <RawResult v-if="!previewMode" :images="resultImageUrls" />
+        <RawResult :images="resultImageUrls" />
         <Preview v-if="previewMode" :images="resultImageUrls" :dark-mode="false" />
         <Preview v-if="previewMode" :images="resultImageUrls" :dark-mode="true" />
         <Checkbox v-model="previewMode" name="サンプル表示">
