@@ -30,27 +30,27 @@ export default defineComponent({
         <img
             v-for="(col, j) in row"
             :key="j"
-            class="img in_text"
+            class="img medium"
             :src="col">
         <img
             v-for="(col, j) in row"
             :key="j"
-            class="img in_text"
+            class="img medium"
             :src="col">
         <img
             v-for="(col, j) in row"
             :key="j"
-            class="img in_text"
+            class="img medium"
             :src="col">
         <img
             v-for="(col, j) in row"
             :key="j"
-            class="img in_text"
+            class="img medium"
             :src="col">
         <img
             v-for="(col, j) in row"
             :key="j"
-            class="img in_text"
+            class="img medium"
             :src="col">
       </span>
     </div>
@@ -105,6 +105,12 @@ export default defineComponent({
 .large {
   height: 4.2em;
   min-height: 4.2em;
+  vertical-align: top;
+}
+
+.medium {
+  height: 2.8em;
+  min-height: 2.8em;
   vertical-align: top;
 }
 

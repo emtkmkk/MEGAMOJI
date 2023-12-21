@@ -89,8 +89,9 @@ export default defineComponent({
       }));
     },
     currentFilename(): string {
-      return this.conf.filename?.replace(/\n/g, "")
+      const filename = this.conf.filename?.replace(/\n/g, "")
         || jaToRoomaji(this.conf.content).replace(/\n/g, "");
+      return filename ? `${filename} .png` : "";
     },
   },
   watch: {
@@ -198,7 +199,7 @@ export default defineComponent({
               </Space>
             </Space>
           </Fieldset>
-          <Fieldset :label="`${!showDetails ? `${currentFilename}.png` : '出力ファイル名'}`">
+          <Fieldset v-if="showDetails || currentFilename" :label="`${!showDetails ? currentFilename : '出力ファイル名'}`">
             <Input
                 v-if="showDetails"
                 v-model="conf.filename"

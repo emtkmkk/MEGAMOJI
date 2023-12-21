@@ -84,7 +84,7 @@ export default defineComponent({
           block
           :min="-200"
           :max="200"
-          :step="5"
+          :step="1"
           @update:model-value="$emit('update:gradientSx', $event)" />
       <Number
           v-if="showDetails && modelValue.length > 0"
@@ -92,7 +92,7 @@ export default defineComponent({
           block
           :min="-200"
           :max="200"
-          :step="5"
+          :step="1"
           @update:model-value="$emit('update:gradientSy', $event)" />
     </div>
     <div>
@@ -102,7 +102,7 @@ export default defineComponent({
           block
           :min="-200"
           :max="200"
-          :step="5"
+          :step="1"
           @update:model-value="$emit('update:gradientEx', $event)" />
       <Number
           v-if="showDetails && modelValue.length > 0"
@@ -110,7 +110,7 @@ export default defineComponent({
           block
           :min="-200"
           :max="200"
-          :step="5"
+          :step="1"
           @update:model-value="$emit('update:gradientEy', $event)" />
     </div>
     <Checkbox

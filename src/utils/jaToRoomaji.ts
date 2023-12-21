@@ -1,4 +1,4 @@
-export const table:{[key: string]: string} = {
+export const table: { [key: string]: string } = {
   いぇ: "ye",
   うぁ: "wha",
   うぃ: "wi",
@@ -204,14 +204,12 @@ export const table:{[key: string]: string} = {
 };
 
 export function jaToRoomaji(str: string): string {
-  // ひらがなかカタカナだけでなければ終了
-  if (!/^[ぁ-んァ-ンー\s]+$/.test(str)) {
+  // ひらがなかカタカナか全角半角英数字だけでなければ終了
+  if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９\s]+$/.test(str)) {
     return str;
   }
 
-  const hiraStr = kanaToHira(str);
-
-  return hiraToRoma(hiraStr);
+  return hiraToRoma(kanaToHira(toHalfWidth(str)));
 }
 
 function kanaToHira(str: string): string {
@@ -245,4 +243,12 @@ export function hiraToRoma(str: string): string {
   roma = roma.replace(regTu, "$1$1");
   roma = roma.replace(regXtu, "xtu");
   return roma;
+}
+
+function toHalfWidth(str: string): string {
+  // 全角英数字を半角に変換
+  str = str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => {
+    return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+  });
+  return str;
 }
