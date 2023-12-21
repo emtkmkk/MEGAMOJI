@@ -29,7 +29,7 @@ test("シンプルなテキスト絵文字を作成して、ダウンロード�
   const path = await download.path();
 
   // ダウンロードしたファイル名が テキスト.png
-  expect(download.suggestedFilename()).toMatch(/^hogeほげ\.png$/);
+  expect(download.suggestedFilename()).toMatch(/^hogehoge\.png$/);
 
   // ダウンロードしたファイルがお手本と十分似ている
   const data1 = await loadFromPath(Path.resolve(__dirname, "./assets/textsample.png"));
