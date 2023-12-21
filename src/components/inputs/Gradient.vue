@@ -143,7 +143,7 @@ export default defineComponent({
       :model-value="colorPickerTarget != null ? absColorStop[colorPickerTarget].color : ''"
       @update:model-value="updateColor($event)">
     <Number
-        :model-value="colorPickerTarget != null ? absColorStop[colorPickerTarget].pos : ''"
+        :model-value="colorPickerTarget != null ? absColorStop[colorPickerTarget].pos : 0"
         block
         :min="0"
         :max="100"

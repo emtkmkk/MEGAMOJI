@@ -40,7 +40,7 @@ export default defineComponent({
         this.$emit("update:gradientSx", 0);
         this.$emit("update:gradientSy", 0);
         this.$emit("update:gradientEx", 0);
-        this.$emit("update:gradientEy", 0);
+        this.$emit("update:gradientEy", 100);
         this.$emit("update:gradientMarker", false);
       }
     },
@@ -63,7 +63,7 @@ export default defineComponent({
       this.$emit("update:gradientSx", 0);
       this.$emit("update:gradientSy", 0);
       this.$emit("update:gradientEx", 0);
-      this.$emit("update:gradientEy", 0);
+      this.$emit("update:gradientEy", 100);
       this.$emit("update:gradientMarker", false);
     },
   },
@@ -114,6 +114,7 @@ export default defineComponent({
           @update:model-value="$emit('update:gradientEy', $event)" />
     </div>
     <Checkbox
+        v-if="showDetails && modelValue.length > 0"
         name="マーカー表示"
         :model-value="gradientMarker"
         @update:model-value="$emit('update:gradientMarker', $event)">

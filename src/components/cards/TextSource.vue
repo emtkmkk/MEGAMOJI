@@ -107,6 +107,9 @@ export default defineComponent({
     Analytics.changeFont(this.conf.font);
   },
   methods: {
+    roomaji(str: string): string {
+      return jaToRoomaji(str);
+    }
     render(dirty?: boolean): void {
       if (dirty) {
         this.dirty = true;
@@ -198,7 +201,7 @@ export default defineComponent({
             <div v-if="!showDetails || !conf.filename">
               {{
                 conf.filename?.replace(/\n/g, "") ||
-                  jaToRoomaji(conf.content).replace(/\n/g, "")
+                  roomaji(conf.content).replace(/\n/g, "")
               }}
             </div>
             <Input v-if="showDetails" v-model="conf.filename" name="出力ファイル名" block />
@@ -233,7 +236,7 @@ export default defineComponent({
                 block
                 :min="-3"
                 :max="3"
-                :step="0.01" />
+                :step="0.005" />
           </Fieldset>
           <FontColorSelectBlock
               v-model="conf.color"
