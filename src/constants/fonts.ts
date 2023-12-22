@@ -14,12 +14,12 @@ import HachiMaruPop from "../fonts/HachiMaruPop-Regular.woff";
 import ChikaraYowaku from "../fonts/ChikaraYowaku.woff";
 import TamanegiKaishoGeki from "../fonts/TamanegiKaishoGekiV6.woff";
 
-const loadFont = (font: Record<string, string>): Promise<string> => {
-  return new Promise((resolve, reject) => {
+const loadFont = (font: Record<string, string>): Promise<string> => 
+  new Promise((resolve, reject) => {
     const family = Object.keys(font)[0];
     const url = font[family];
     const fontFace = new FontFace(family, `url('${url}')`);
-    
+
     fontFace.load().then(() => {
       document.fonts.add(fontFace);
       resolve(`normal 1em '${family}'`);
@@ -27,7 +27,6 @@ const loadFont = (font: Record<string, string>): Promise<string> => {
       reject(error);
     });
   });
-};
 
 export default [
   {

@@ -52,16 +52,15 @@ export default defineComponent({
   methods: {
     async loadSelectedFontsAsync() {
       const selectedFonts = this.fonts
-        .flatMap((category)  => category.fonts)
+        .flatMap((category) => category.fonts)
         .filter((font) => this.modelValue.includes(`normal 1em ${font.family}`));
 
-      const resolvedCount = 
-        await Promise.all(
+      const resolvedCount = await Promise.all(
           selectedFonts.map((font) => font.value)
-          .map((p)  => p.then(() => true).catch(() => false))
-        ).then((results)  => results.filter(Boolean).length);
+          .map((p) => p.then(() => true).catch(() => false))
+          ).then((results) => results.filter(Boolean).length);
 
-      if (resolvedCount === promises.length) {
+      if (resolvedCount === selectedFonts.length) {
         this.$emit("update:fontReady", true);
       }
     },
@@ -83,7 +82,7 @@ export default defineComponent({
           <span
               :style="{ font: `normal 1em '${font.family}'`,
               lineHeight: 1 }">
-            {{ font.label }}
+                        {{ font.label }}
           </span>
         </Checkbox>
       </Space>
