@@ -64,7 +64,7 @@ export default defineComponent({
         outlines: [] as string[],
         gradientPos: [0, 0, 0, 100],
         gradientMarker: false,
-        font: fonts[0].fonts[0].value,
+        font: `normal 1em '${fonts[0].fonts[0].family}'`,
         /* advanced */
         lineSpacing: 0,
         padding: 0,
