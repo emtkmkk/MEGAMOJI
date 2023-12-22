@@ -5,6 +5,7 @@ import Input from "../inputs/Input.vue";
 import Fieldset from "../inputs/Fieldset.vue";
 import Space from "../global/Space.vue";
 import Button from "../inputs/Button.vue";
+import Select from "../inputs/Select.vue";
 import fonts from "../../constants/fonts";
 
 const validateFont = (font: string): boolean => {
@@ -15,7 +16,7 @@ const validateFont = (font: string): boolean => {
 
 export default defineComponent({
   components: {
-    Checkbox, Input, Space, Fieldset, Button,
+    Checkbox, Input, Space, Fieldset, Button, Select,
   },
   props: {
     modelValue: { type: String, required: true },
