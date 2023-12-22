@@ -55,7 +55,7 @@ export default defineComponent({
             <ColorSample :color="color" />
           </ToggleButton>
         </Space>
-        <Space v-for="row in getRelationColor(modelValue)" :key="row[0]" small>
+        <Space v-if="modelValue" v-for="row in getRelationColor(modelValue)" :key="row[0]" small>
           <ToggleButton
               v-for="color in row"
               :key="color"
