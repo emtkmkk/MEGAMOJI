@@ -85,7 +85,10 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const availableFonts = await window.queryLocalFonts();
-        this.localFonts = availableFonts.map((font: { postscriptName: any; family: any; }) => ({ label: font.postscriptName, family: `normal 1em ${font.family}` }));
+        this.localFonts = availableFonts
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          .map((font: { postscriptName: any; family: any; }) => ({ label: font.postscriptName, family: `normal 1em ${font.family}` }));
       } catch (err) {
         this.localFontsError = true;
       }
