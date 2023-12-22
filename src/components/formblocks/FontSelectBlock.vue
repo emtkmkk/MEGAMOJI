@@ -89,7 +89,7 @@ export default defineComponent({
         const availableFonts = await window.queryLocalFonts();
         this.localFonts = availableFonts
           .map((font: { postscriptName: string; family: string; }) => (
-            { label: font.postscriptName, value: `normal 1em ${font.family}` }
+            { label: font.postscriptName, value: `normal 1em '${font.family}'` }
           ));
       } catch (err) {
         this.localFontsError = true;
