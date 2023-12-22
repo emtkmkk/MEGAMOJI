@@ -157,7 +157,7 @@ export default defineComponent({
   --fg:             #000000d0;
   --bg:             #ffffffff;
   --accentBg:       #00000004;
-  --border:         #00000040;
+  --border:         #000000ff;
   --primaryLighter: #ffb81c; /* l = 80 */
   --primary:        #eeaa00; /* okhsl(80, 100, 75) */
   --primaryDarker:  #cd9200; /* l = 65 */
@@ -192,7 +192,7 @@ export default defineComponent({
     --fg:             #ffffffd0;
     --bg:             #222222ff;
     --accentBg:       #ffffff10;
-    --border:         #ffffff40;
+    --border:         #ffffffff;
     --primaryLighter: #e6af47; /* l = 75 */
     --primary:        #d7a139; /* okhsl(80, 80, 70) */
     --primaryDarker:  #c79431; /* l = 65 */

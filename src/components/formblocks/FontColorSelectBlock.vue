@@ -7,10 +7,11 @@ import ColorSample from "../global/ColorSample.vue";
 import Space from "../global/Space.vue";
 import GradientBlock from "./GradientBlock.vue";
 import fontcolors from "../../constants/fontcolors";
+import { relationColor } from "../../utils/color";
 
 export default defineComponent({
   components: {
-    ToggleButton, ColorSample, Color, Space, Fieldset, GradientBlock,
+    ToggleButton, ColorSample, Color, Space, Fieldset, GradientBlock, relationColor
   },
   props: {
     modelValue: { type: String, required: true },
@@ -38,6 +39,18 @@ export default defineComponent({
     <Space vertical full>
       <Space v-if="!showDetails" small vertical>
         <Space v-for="row in fontcolors" :key="row[0]" small>
+          <ToggleButton
+              v-for="color in row"
+              :key="color"
+              size="smallIcon"
+              name="文字色"
+              :model-value="modelValue"
+              :value="color"
+              @update:model-value="$emit('update:modelValue', $event)">
+            <ColorSample :color="color" />
+          </ToggleButton>
+        </Space>
+        <Space v-for="row in relationColor(modelValue)" :key="row[0]" small>
           <ToggleButton
               v-for="color in row"
               :key="color"
