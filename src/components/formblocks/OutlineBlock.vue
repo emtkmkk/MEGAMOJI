@@ -27,7 +27,9 @@ export default defineComponent({
       return [
         { value: "#000000", absColor: "#000000" },
         { value: "darker", absColor: absColor("darker", this.baseColor) },
+        { value: "lighter", absColor: absColor("lighter", this.baseColor) },
         { value: "lighterer", absColor: absColor("lighterer", this.baseColor) },
+        { value: "#FFFFFF", absColor: "#FFFFFF" },
       ];
     },
     absColors(): string[] {

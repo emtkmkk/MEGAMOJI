@@ -36,7 +36,7 @@ const makeTextImageSingleLine = (
 
   for (let i = outlineColors.length - 1; i >= 0; i -= 1) {
     ctx.strokeStyle = outlineColors[i];
-    ctx.lineWidth = (i + 1) * 8;
+    ctx.lineWidth = (i + 1) * 16;
     ctx.strokeText(line, marginPx, marginPx);
   }
 
