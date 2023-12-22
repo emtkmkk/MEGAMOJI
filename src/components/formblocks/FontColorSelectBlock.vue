@@ -11,7 +11,7 @@ import { relationColor } from "../../utils/color";
 
 export default defineComponent({
   components: {
-    ToggleButton, ColorSample, Color, Space, Fieldset, GradientBlock, relationColor,
+    ToggleButton, ColorSample, Color, Space, Fieldset, GradientBlock,
   },
   props: {
     modelValue: { type: String, required: true },
@@ -26,15 +26,15 @@ export default defineComponent({
   emits: [
     "update:modelValue", "update:gradient", "update:gradientSx", "update:gradientSy", "update:gradientEx", "update:gradientEy", "update:gradientMarker",
   ],
-  computed: {
-    getRelationColor(baseColor: string): string[][] {
-      return relationColor(baseColor);
-    },
-  },
   data() {
     return {
       fontcolors,
     };
+  },
+  computed: {
+    getRelationColor(baseColor: string): string[][] {
+      return relationColor(baseColor);
+    },
   },
 });
 </script>
