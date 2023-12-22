@@ -4,6 +4,7 @@ import Checkbox from "../inputs/Checkbox.vue";
 import Input from "../inputs/Input.vue";
 import Fieldset from "../inputs/Fieldset.vue";
 import Space from "../global/Space.vue";
+import Button from "../inputs/Button.vue";
 import fonts from "../../constants/fonts";
 
 const validateFont = (font: string): boolean => {
@@ -14,7 +15,7 @@ const validateFont = (font: string): boolean => {
 
 export default defineComponent({
   components: {
-    Checkbox, Input, Space, Fieldset,
+    Checkbox, Input, Space, Fieldset, Button,
   },
   props: {
     modelValue: { type: String, required: true },
@@ -26,6 +27,8 @@ export default defineComponent({
   ],
   data: (props) => ({
     fonts,
+    localFonts: [],
+    localFontsError: false,
     stringValue: props.modelValue,
     stringIsValid: true,
   }),
@@ -77,6 +80,16 @@ export default defineComponent({
         this.$emit("update:fontReady", true);
       }
     },
+    async getLocalFont() {
+      try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const availableFonts = await window.queryLocalFonts();
+        this.localFontList = availableFonts.map((font) => ({ label: font.postscriptName, family: `normal 1em ${font.family}` }));
+      } catch (err) {
+        this.localFontsError = true;
+      }
+    };
   },
 });
 </script>
@@ -85,31 +98,21 @@ export default defineComponent({
   <Space vertical xlarge full>
     <Fieldset v-for="category in fonts" :key="category.label" :label="category.label">
       <Space vertical>
-        <Checkbox
-            v-for="font in category.fonts"
-            :key="font.label"
-            :name="font.label"
-            :model-value="modelValue === `normal 1em '${font.family}'`"
-            @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
-          <span
-              :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">
+        <Checkbox v-for="font in category.fonts" :key="font.label" :name="font.label"
+          :model-value="modelValue === `normal 1em '${font.family}'`" :value="`normal 1em '${font.family}'`"
+          @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
+          <span :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">
             {{ font.label }}
           </span>
         </Checkbox>
       </Space>
     </Fieldset>
-    <Fieldset v-if="showDetails || localFontOptions.length" label="その他のフォント">
-      <Select
-          v-if="!showDetails"
-          v-model="stringValue"
-          name="その他のフォント"
-          :options="localFontOptions" />
-      <Input
-          v-if="showDetails"
-          v-model="stringValue"
-          name="その他のフォント"
-          block
-          :error="!stringIsValid" />
+    <Fieldset v-if="showDetails || !localFontsError" label="その他のフォント">
+      <Button v-if="!showDetails && !localFonts.length" name="フォントを取得" @click="getLocalFont">
+        フォントを取得
+      </Button>
+      <Select v-if="!showDetails && localFonts.length" v-model="stringValue" name="その他のフォント" :options="localFonts" />
+      <Input v-if="showDetails" v-model="stringValue" name="その他のフォント" block :error="!stringIsValid" />
     </Fieldset>
   </Space>
 </template>
