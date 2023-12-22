@@ -31,6 +31,7 @@ export default defineComponent({
     localFonts: [],
     localFontsError: false,
     stringValue: props.modelValue,
+    selectOption: {},
     stringIsValid: true,
   }),
   computed: {
@@ -94,6 +95,9 @@ export default defineComponent({
         this.localFontsError = true;
       }
     },
+    selectLocalFont(font: { label: string; value: string; }): void {
+      this.stringValue = font.value;
+    },
   },
 });
 </script>
@@ -123,9 +127,10 @@ export default defineComponent({
       </Button>
       <Select
           v-if="!showDetails && localFonts.length"
-          v-model="stringValue"
+          v-model="selectOption"
           name="その他のフォント"
-          :options="localFonts" />
+          :options="localFonts" 
+          @update:model-value="selectLocalFont($event)" />
       <Input
           v-if="showDetails"
           v-model="stringValue"
