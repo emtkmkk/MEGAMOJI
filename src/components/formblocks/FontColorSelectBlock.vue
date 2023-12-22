@@ -11,7 +11,7 @@ import { relationColor } from "../../utils/color";
 
 export default defineComponent({
   components: {
-    ToggleButton, ColorSample, Color, Space, Fieldset, GradientBlock, relationColor
+    ToggleButton, ColorSample, Color, Space, Fieldset, GradientBlock,
   },
   props: {
     modelValue: { type: String, required: true },

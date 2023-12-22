@@ -62,7 +62,7 @@ const recommend2Color = (hexColor: string): string => {
 
 export const relationColor = (baseColor: string): string[][] => {
   const hsl = ColorConvert.hex.hsl(baseColor);
-  let ret1 = [];
+  const ret1 = [];
   ret1.push(ColorConvert.hsl.hex([hsl[0], 10, hsl[2]]));
   ret1.push(ColorConvert.hsl.hex([hsl[0], 17, hsl[2]]));
   ret1.push(ColorConvert.hsl.hex([hsl[0], 25, hsl[2]]));
@@ -70,7 +70,7 @@ export const relationColor = (baseColor: string): string[][] => {
   ret1.push(ColorConvert.hsl.hex([hsl[0], 43, hsl[2]]));
   ret1.push(ColorConvert.hsl.hex([hsl[0], 50, hsl[2]]));
   ret1.push(ColorConvert.hsl.hex([hsl[0], 60, hsl[2]]));
-  let ret2 = [];
+  const ret2 = [];
   ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 20]));
   ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 30]));
   ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 37]));
@@ -79,7 +79,7 @@ export const relationColor = (baseColor: string): string[][] => {
   ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 70]));
   ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 80]));
   return [ret1, ret2];
-}
+};
 
 export const absColor = (relColor: string, baseColor: string): string => {
   if (relColor === "darker") {
