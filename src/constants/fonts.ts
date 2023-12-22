@@ -15,18 +15,19 @@ import ChikaraYowaku from "../fonts/ChikaraYowaku.woff";
 import TamanegiKaishoGeki from "../fonts/TamanegiKaishoGekiV6.woff";
 
 const loadFont = (font: Record<string, string>): Promise<string> => new Promise(
-    (resolve, reject) => {
-      const family = Object.keys(font)[0];
-      const url = font[family];
-      const fontFace = new FontFace(family, `url('${url}')`);
+  (resolve, reject) => {
+    const family = Object.keys(font)[0];
+    const url = font[family];
+    const fontFace = new FontFace(family, `url('${url}')`);
 
-      fontFace.load().then(() => {
-        document.fonts.add(fontFace);
-        resolve(`normal 1em '${family}'`);
-      }).catch((error) => {
-        reject(error);
-      });
+    fontFace.load().then(() => {
+      document.fonts.add(fontFace);
+      resolve(`normal 1em '${family}'`);
+    }).catch((error) => {
+      reject(error);
     });
+  }
+);
 
 export default [
   {
