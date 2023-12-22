@@ -71,6 +71,7 @@ export default defineComponent({
         letterSpacing: 0,
         margin: 0.025,
         filename: "",
+        fontReady: false,
       },
       showDetails: false,
       /* internals */
@@ -116,7 +117,7 @@ export default defineComponent({
       if (dirty) {
         this.dirty = true;
       }
-      if (!this.dirty || this.running) {
+      if (!this.dirty || this.running || !this.conf.fontReady) {
         return;
       }
       this.running = true;
@@ -155,6 +156,7 @@ export default defineComponent({
       <GridItem>
         <FontSelectBlock
             v-model="conf.font"
+            v-model:fontReady="conf.fontReady"
             :show-details="showDetails" />
       </GridItem>
       <GridItem :span="2">

@@ -19,9 +19,10 @@ export default defineComponent({
   props: {
     modelValue: { type: String, required: true },
     showDetails: { type: Boolean, required: true },
+    fontReady: { type: Boolean, required: true },
   },
   emits: [
-    "update:modelValue",
+    "update:modelValue", "update:fontReady",
   ],
   data: (props) => ({
     fonts,
@@ -33,15 +34,46 @@ export default defineComponent({
       handler() {
         this.stringValue = this.modelValue;
         this.stringIsValid = true;
+        this.$emit("update:fontReady", false);
+        this.loadSelectedFontsAsync();
       },
+      immediate: true,
     },
     stringValue: {
       handler() {
         this.stringIsValid = validateFont(this.stringValue);
         if (this.stringIsValid) {
           this.$emit("update:modelValue", this.stringValue);
+          this.$emit("update:fontReady", true);
         }
       },
+    },
+  },
+  methods: {
+    async loadSelectedFontsAsync() {
+      const selectedFonts = this.fonts
+        .flatMap(category => category.fonts)
+        .filter(font => this.modelValue.includes(font.value));
+
+      await Promise.all(selectedFonts.map(font => this.loadFontAsync(font.value)));
+
+      this.$emit("update:fontReady", true);
+    },
+    async loadFontAsync(font: string): Promise<void> {
+      const s = new Option().style;
+      s.font = font;
+
+      return new Promise<void>((resolve) => {
+        const checkFont = () => {
+          if (s.font !== "") {
+            resolve();
+          } else {
+            requestAnimationFrame(checkFont);
+          }
+        };
+
+        checkFont();
+      });
     },
   },
 });
@@ -57,8 +89,8 @@ export default defineComponent({
             :name="font.label"
             :model-value="modelValue"
             :value="font.value"
-            @update:model-value="$emit('update:modelValue', $event)">
-          <span :style="{ font: font.value, lineHeight: 1 }">{{ font.label }}</span>
+            @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
+          <span :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">{{ font.label }}</span>
         </Checkbox>
       </Space>
     </Fieldset>
