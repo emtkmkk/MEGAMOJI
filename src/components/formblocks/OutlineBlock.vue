@@ -27,12 +27,11 @@ export default defineComponent({
       return [
         { value: "recommend", absColor: absColor("recommend", this.baseColor) },
         { value: "recommend2", absColor: absColor("recommend2", this.baseColor) },
-        { value: "#000000", absColor: "#000000" },
         { value: "darker", absColor: absColor("darker", this.baseColor) },
         { value: "identical", absColor: absColor("identical", this.baseColor) },
         { value: "lighter", absColor: absColor("lighter", this.baseColor) },
         { value: "lighterer", absColor: absColor("lighterer", this.baseColor) },
-        { value: "#FFFFFF", absColor: "#FFFFFF" },
+        { value: "recommendR", absColor: absColor("recommendR", this.baseColor) },
       ];
     },
     absColors(): string[] {

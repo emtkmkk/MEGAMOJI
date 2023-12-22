@@ -60,25 +60,32 @@ const recommend2Color = (hexColor: string): string => {
   return `#${newColor}`;
 };
 
+const recommendReverseColor = (hexColor: string): string => {
+  const hsl = ColorConvert.hex.hsl(hexColor);
+  const newColor = ColorConvert.hsl.hex([hsl[0], hsl[1], hsl[2] >= 50 ? 100 : 0]);
+  return `#${newColor}`;
+};
+
 export const relationColor = (baseColor: string): string[][] => {
   const hsl = ColorConvert.hex.hsl(baseColor);
-  const ret1 = [];
-  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 10, hsl[2]])}`);
-  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 17, hsl[2]])}`);
-  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 25, hsl[2]])}`);
-  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 35, hsl[2]])}`);
-  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 43, hsl[2]])}`);
-  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 50, hsl[2]])}`);
-  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 60, hsl[2]])}`);
-  const ret2 = [];
-  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 20])}`);
-  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 30])}`);
-  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 37])}`);
-  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 55])}`);
-  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 63])}`);
-  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 70])}`);
-  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 80])}`);
-  return [ret1, ret2];
+  if (hsl[0] === 0 && hsl[1] === 0) return [];
+  const hsl1 = [];
+  hsl1.push(`#${ColorConvert.hsl.hex([hsl[0], 20, hsl[2]])}`);
+  hsl1.push(`#${ColorConvert.hsl.hex([hsl[0], 30, hsl[2]])}`);
+  hsl1.push(`#${ColorConvert.hsl.hex([hsl[0], 40, hsl[2]])}`);
+  hsl1.push(`#${ColorConvert.hsl.hex([hsl[0], 52, hsl[2]])}`);
+  hsl1.push(`#${ColorConvert.hsl.hex([hsl[0], 64, hsl[2]])}`);
+  hsl1.push(`#${ColorConvert.hsl.hex([hsl[0], 76, hsl[2]])}`);
+  hsl1.push(`#${ColorConvert.hsl.hex([hsl[0], 88, hsl[2]])}`);
+  const hsl2 = [];
+  hsl2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 20])}`);
+  hsl2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 27])}`);
+  hsl2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 34])}`);
+  hsl2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 58])}`);
+  hsl2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 66])}`);
+  hsl2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 75])}`);
+  hsl2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 85])}`);
+  return [hsl1, hsl2];
 };
 
 export const absColor = (relColor: string, baseColor: string): string => {
@@ -92,6 +99,8 @@ export const absColor = (relColor: string, baseColor: string): string => {
     return recommendColor(baseColor);
   } else if (relColor === "recommend2") {
     return recommend2Color(baseColor);
+  } else if (relColor === "recommendR") {
+    return recommendReverseColor(baseColor);
   } else if (relColor === "identical") {
     return baseColor;
   } else {
