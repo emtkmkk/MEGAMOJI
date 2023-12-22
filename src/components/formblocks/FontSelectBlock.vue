@@ -89,7 +89,7 @@ export default defineComponent({
       } catch (err) {
         this.localFontsError = true;
       }
-    };
+    },
   },
 });
 </script>
