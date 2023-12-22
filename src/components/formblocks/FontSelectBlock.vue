@@ -29,6 +29,19 @@ export default defineComponent({
     stringValue: props.modelValue,
     stringIsValid: true,
   }),
+  computed: {
+    localFontOptions(): { label: string; value: string; }[] {
+      var fontList = document.fonts;
+
+      if (!fontList) return [];
+
+      const localFontList: { label: string; value: string; }[] = [];
+      // フォント一覧をコンソールに表示
+      fontList.forEach((font) => localFontList.push({ label: font.family, value: `normal 1em ${font.family}` }));
+      
+      return localFontList;
+    },
+  },
   watch: {
     modelValue: {
       handler() {
@@ -86,8 +99,13 @@ export default defineComponent({
         </Checkbox>
       </Space>
     </Fieldset>
-    <Fieldset v-if="showDetails" label="その他のフォント">
-      <Input v-model="stringValue" name="その他のフォント" block :error="!stringIsValid" />
+    <Fieldset v-if="showDetails || localFontOptions.length" label="その他のフォント">
+      <Select
+          v-if="!showDetails"
+          v-model="stringValue"
+          name="その他のフォント"
+          :options="localFontOptions" />
+      <Input v-if="showDetails" v-model="stringValue" name="その他のフォント" block :error="!stringIsValid" />
     </Fieldset>
   </Space>
 </template>
