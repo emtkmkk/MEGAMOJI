@@ -56,9 +56,9 @@ export default defineComponent({
         .filter((font) => this.modelValue.includes(`normal 1em ${font.family}`));
 
       const resolvedCount = await Promise.all(
-          selectedFonts.map((font) => font.value)
-          .map((p) => p.then(() => true).catch(() => false))
-          ).then((results) => results.filter(Boolean).length);
+        selectedFonts.map((font) => font.value)
+          .map((p) => p.then(() => true).catch(() => false)),
+      ).then((results) => results.filter(Boolean).length);
 
       if (resolvedCount === selectedFonts.length) {
         this.$emit("update:fontReady", true);
@@ -80,9 +80,8 @@ export default defineComponent({
             :value="font.value"
             @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
           <span
-              :style="{ font: `normal 1em '${font.family}'`,
-              lineHeight: 1 }">
-                        {{ font.label }}
+              :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">
+            {{ font.label }}
           </span>
         </Checkbox>
       </Space>
