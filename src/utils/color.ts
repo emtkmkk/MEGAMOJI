@@ -61,7 +61,6 @@ const recommend2Color = (hexColor: string): string => {
 };
 
 export const relationColor = (baseColor: string): string[][] => {
-  console.log(`relationColor:${baseColor}:start`);
   const hsl = ColorConvert.hex.hsl(baseColor);
   const ret1 = [];
   ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 10, hsl[2]])}`);
@@ -79,7 +78,6 @@ export const relationColor = (baseColor: string): string[][] => {
   ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 63])}`);
   ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 70])}`);
   ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 80])}`);
-  console.log(`relationColor:${baseColor}:end`);
   return [ret1, ret2];
 };
 
