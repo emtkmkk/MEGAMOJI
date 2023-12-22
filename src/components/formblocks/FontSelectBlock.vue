@@ -89,8 +89,7 @@ export default defineComponent({
             v-for="font in category.fonts"
             :key="font.label"
             :name="font.label"
-            :model-value="modelValue"
-            :value="font.value"
+            :model-value="modelValue === `normal 1em '${font.family}'`"
             @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
           <span
               :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">
