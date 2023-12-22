@@ -52,28 +52,18 @@ export default defineComponent({
   methods: {
     async loadSelectedFontsAsync() {
       const selectedFonts = this.fonts
-        .flatMap(category => category.fonts)
-        .filter(font => this.modelValue.includes(font.value));
+        .flatMap((category)  => category.fonts)
+        .filter((font) => this.modelValue.includes(`normal 1em ${font.family}`));
 
-      await Promise.all(selectedFonts.map(font => this.loadFontAsync(font.value)));
+      const resolvedCount = 
+        await Promise.all(
+          selectedFonts.map((font) => font.value)
+          .map((p)  => p.then(() => true).catch(() => false))
+        ).then((results)  => results.filter(Boolean).length);
 
-      this.$emit("update:fontReady", true);
-    },
-    async loadFontAsync(font: string): Promise<void> {
-      const s = new Option().style;
-      s.font = font;
-
-      return new Promise<void>((resolve) => {
-        const checkFont = () => {
-          if (s.font !== "") {
-            resolve();
-          } else {
-            requestAnimationFrame(checkFont);
-          }
-        };
-
-        checkFont();
-      });
+      if (resolvedCount === promises.length) {
+        this.$emit("update:fontReady", true);
+      }
     },
   },
 });
@@ -90,7 +80,11 @@ export default defineComponent({
             :model-value="modelValue"
             :value="font.value"
             @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
-          <span :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">{{ font.label }}</span>
+          <span
+              :style="{ font: `normal 1em '${font.family}'`,
+              lineHeight: 1 }">
+            {{ font.label }}
+          </span>
         </Checkbox>
       </Space>
     </Fieldset>
