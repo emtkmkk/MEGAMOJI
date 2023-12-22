@@ -121,6 +121,7 @@ export default defineComponent({
       {{ "マーカー表示" }}
     </Checkbox>
     <Checkbox
+        v-if="!gradientMarker"
         name="グラデーション"
         :model-value="modelValue.length > 0"
         @update:model-value="toggle">
