@@ -105,7 +105,7 @@ export default defineComponent({
         <Checkbox
             v-for="font in category.fonts"
             :key="font.label" :name="font.label"
-            :model-value="modelValue === `normal 1em '${font.family}'`"
+            :model-value="modelValue"
             :value="`normal 1em '${font.family}'`"
             @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
           <span :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">
