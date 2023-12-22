@@ -26,7 +26,7 @@ const loadFont = (font: Record<string, string>): Promise<string> => new Promise(
     }).catch((error) => {
       reject(error);
     });
-  }
+  },
 );
 
 export default [
