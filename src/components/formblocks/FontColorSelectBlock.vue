@@ -32,7 +32,7 @@ export default defineComponent({
     };
   },
   computed: {
-    getRelationColor(baseColor: string): string[][] {
+    getRelationColor(baseColor: string) {
       if (!baseColor) return [];
       return relationColor(baseColor);
     },
