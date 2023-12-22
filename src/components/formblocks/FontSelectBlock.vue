@@ -129,7 +129,7 @@ export default defineComponent({
           v-if="!showDetails && localFonts.length"
           v-model="selectOption"
           name="その他のフォント"
-          :options="localFonts" 
+          :options="localFonts"
           @update:model-value="selectLocalFont($event)" />
       <Input
           v-if="showDetails"
