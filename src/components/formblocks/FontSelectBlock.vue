@@ -31,14 +31,14 @@ export default defineComponent({
   }),
   computed: {
     localFontOptions(): { label: string; value: string; }[] {
-      var fontList = document.fonts;
+      const fontList = document.fonts;
 
       if (!fontList) return [];
 
       const localFontList: { label: string; value: string; }[] = [];
       // フォント一覧をコンソールに表示
       fontList.forEach((font) => localFontList.push({ label: font.family, value: `normal 1em ${font.family}` }));
-      
+
       return localFontList;
     },
   },
@@ -104,7 +104,12 @@ export default defineComponent({
           v-model="stringValue"
           name="その他のフォント"
           :options="localFontOptions" />
-      <Input v-if="showDetails" v-model="stringValue" name="その他のフォント" block :error="!stringIsValid" />
+      <Input 
+          v-if="showDetails"
+          v-model="stringValue"
+          name="その他のフォント"
+          block
+          :error="!stringIsValid" />
     </Fieldset>
   </Space>
 </template>
