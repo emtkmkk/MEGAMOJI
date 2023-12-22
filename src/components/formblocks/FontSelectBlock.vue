@@ -85,7 +85,7 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const availableFonts = await window.queryLocalFonts();
-        this.localFontList = availableFonts.map((font) => ({ label: font.postscriptName, family: `normal 1em ${font.family}` }));
+        this.localFonts = availableFonts.map((font: { postscriptName: any; family: any; }) => ({ label: font.postscriptName, family: `normal 1em ${font.family}` }));
       } catch (err) {
         this.localFontsError = true;
       }
@@ -98,9 +98,12 @@ export default defineComponent({
   <Space vertical xlarge full>
     <Fieldset v-for="category in fonts" :key="category.label" :label="category.label">
       <Space vertical>
-        <Checkbox v-for="font in category.fonts" :key="font.label" :name="font.label"
-          :model-value="modelValue === `normal 1em '${font.family}'`" :value="`normal 1em '${font.family}'`"
-          @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
+        <Checkbox
+            v-for="font in category.fonts"
+            :key="font.label" :name="font.label"
+            :model-value="modelValue === `normal 1em '${font.family}'`"
+            :value="`normal 1em '${font.family}'`"
+            @update:model-value="$emit('update:modelValue', `normal 1em '${font.family}'`)">
           <span :style="{ font: `normal 1em '${font.family}'`, lineHeight: 1 }">
             {{ font.label }}
           </span>
@@ -108,11 +111,23 @@ export default defineComponent({
       </Space>
     </Fieldset>
     <Fieldset v-if="showDetails || !localFontsError" label="その他のフォント">
-      <Button v-if="!showDetails && !localFonts.length" name="フォントを取得" @click="getLocalFont">
+      <Button
+          v-if="!showDetails && !localFonts.length"
+          name="フォントを取得"
+          @click="getLocalFont">
         フォントを取得
       </Button>
-      <Select v-if="!showDetails && localFonts.length" v-model="stringValue" name="その他のフォント" :options="localFonts" />
-      <Input v-if="showDetails" v-model="stringValue" name="その他のフォント" block :error="!stringIsValid" />
+      <Select
+          v-if="!showDetails && localFonts.length"
+          v-model="stringValue"
+          name="その他のフォント"
+          :options="localFonts" />
+      <Input
+          v-if="showDetails"
+          v-model="stringValue"
+          name="その他のフォント"
+          block
+          :error="!stringIsValid" />
     </Fieldset>
   </Space>
 </template>
