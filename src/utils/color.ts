@@ -63,21 +63,21 @@ const recommend2Color = (hexColor: string): string => {
 export const relationColor = (baseColor: string): string[][] => {
   const hsl = ColorConvert.hex.hsl(baseColor);
   const ret1 = [];
-  ret1.push(ColorConvert.hsl.hex([hsl[0], 10, hsl[2]]));
-  ret1.push(ColorConvert.hsl.hex([hsl[0], 17, hsl[2]]));
-  ret1.push(ColorConvert.hsl.hex([hsl[0], 25, hsl[2]]));
-  ret1.push(ColorConvert.hsl.hex([hsl[0], 35, hsl[2]]));
-  ret1.push(ColorConvert.hsl.hex([hsl[0], 43, hsl[2]]));
-  ret1.push(ColorConvert.hsl.hex([hsl[0], 50, hsl[2]]));
-  ret1.push(ColorConvert.hsl.hex([hsl[0], 60, hsl[2]]));
+  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 10, hsl[2]])}`);
+  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 17, hsl[2]])}`);
+  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 25, hsl[2]])}`);
+  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 35, hsl[2]])}`);
+  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 43, hsl[2]])}`);
+  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 50, hsl[2]])}`);
+  ret1.push(`#${ColorConvert.hsl.hex([hsl[0], 60, hsl[2]])}`);
   const ret2 = [];
-  ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 20]));
-  ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 30]));
-  ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 37]));
-  ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 55]));
-  ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 63]));
-  ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 70]));
-  ret2.push(ColorConvert.hsl.hex([hsl[0], hsl[1], 80]));
+  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 20])}`);
+  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 30])}`);
+  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 37])}`);
+  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 55])}`);
+  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 63])}`);
+  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 70])}`);
+  ret2.push(`#${ColorConvert.hsl.hex([hsl[0], hsl[1], 80])}`);
   return [ret1, ret2];
 };
 

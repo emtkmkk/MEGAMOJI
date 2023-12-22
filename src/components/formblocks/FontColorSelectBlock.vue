@@ -33,6 +33,7 @@ export default defineComponent({
   },
   computed: {
     getRelationColor(baseColor: string): string[][] {
+      if (!baseColor) return [];
       return relationColor(baseColor);
     },
   },
@@ -55,18 +56,20 @@ export default defineComponent({
             <ColorSample :color="color" />
           </ToggleButton>
         </Space>
-        <Space v-if="modelValue" v-for="row in getRelationColor(modelValue)" :key="row[0]" small>
-          <ToggleButton
-              v-for="color in row"
-              :key="color"
-              size="smallIcon"
-              name="文字色"
-              :model-value="modelValue"
-              :value="color"
-              @update:model-value="$emit('update:modelValue', $event)">
-            <ColorSample :color="color" />
-          </ToggleButton>
-        </Space>
+        <template v-if="modelValue">
+          <Space v-for="row in getRelationColor(modelValue)" :key="row[0]" small>
+            <ToggleButton
+                v-for="color in row"
+                :key="color"
+                size="smallIcon"
+                name="文字色"
+                :model-value="modelValue"
+                :value="color"
+                @update:model-value="$emit('update:modelValue', $event)">
+              <ColorSample :color="color" />
+            </ToggleButton>
+          </Space>
+        </template>
       </Space>
       <Color
           v-else
