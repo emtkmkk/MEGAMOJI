@@ -104,7 +104,7 @@ export default defineComponent({
           v-model="stringValue"
           name="その他のフォント"
           :options="localFontOptions" />
-      <Input 
+      <Input
           v-if="showDetails"
           v-model="stringValue"
           name="その他のフォント"
