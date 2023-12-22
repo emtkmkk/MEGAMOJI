@@ -86,8 +86,9 @@ export default defineComponent({
         // @ts-ignore
         const availableFonts = await window.queryLocalFonts();
         this.localFonts = availableFonts
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .map((font) => ({ label: font.postscriptName, family: `normal 1em ${font.family}` }));
+          .map((font: { postscriptName: string; family: string; }) => (
+            { label: font.postscriptName, family: `normal 1em ${font.family}` }
+          ));
       } catch (err) {
         this.localFontsError = true;
       }
