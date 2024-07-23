@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType, watch } from "vue";
+import { defineComponent, PropType } from "vue";
 import Button from "../inputs/Button.vue";
 import ToggleButton from "../inputs/ToggleButton.vue";
 import Fieldset from "../inputs/Fieldset.vue";
