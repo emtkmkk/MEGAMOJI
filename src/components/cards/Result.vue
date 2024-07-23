@@ -29,6 +29,7 @@ export default defineComponent({
   data() {
     return {
       previewMode: false,
+      token: localStorage.getItem('google_form_token') || "",
     };
   },
   computed: {
@@ -42,6 +43,17 @@ export default defineComponent({
       const filename = filenamify(this.name ?? "", { replacement: "" }).normalize() || "megamoji";
       download.then((res) => saveAs(res, `${filename}.${extension(res)}`));
       Analytics.download();
+    },
+    async openGoogleForm(): Promise<void> {
+      if (!this.token) {
+        this.token = prompt("もこきーのトークンを入力（未入力可）:", "") || "";
+        localStorage.setItem('google_form_token', this.token);
+      }
+      
+      const filename = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
+      const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfsYBpT1C6Ko3u7mu27Mr-1HKlp_wTsQQcXI3AFQGKeZAl53Q/viewform?usp=pp_url${ this.token ? `&entry.1795851707=${encodeURIComponent(this.token)}` : ""}&entry.2020474933=${encodeURIComponent(filename)}&entry.1422557821=%E6%96%87%E5%AD%97%E3%81%A0%E3%81%91%E3%81%AE%E7%B5%B5%E6%96%87%E5%AD%97%E3%81%AA%E3%81%AE%E3%81%A7%E4%B8%8D%E8%A6%81%EF%BC%88PD%EF%BC%89`;
+      
+      window.open(formUrl, '_blank');
     },
   },
 });
@@ -83,6 +95,12 @@ export default defineComponent({
           <Save />
         </template>
         絵文字を保存
+      </Button>
+      <Button type="primary" name="申請フォームを開く" @click="openGoogleForm">
+        <template #icon>
+          <Emoji />
+        </template>
+        申請フォームを開く
       </Button>
     </Space>
   </Space>

@@ -22,6 +22,12 @@ export default defineComponent({
   emits: [
     "update:modelValue",
   ],
+  data() {
+    return {
+      firstRowSelection: [] as string[], // 1段目の選択
+      secondRowSelection: [] as string[], // 2段目の選択
+    };
+  },
   computed: {
     options(): OutlineOption[] {
       return [
@@ -37,15 +43,32 @@ export default defineComponent({
     absColors(): string[] {
       return this.modelValue.map((color) => absColor(color, this.baseColor));
     },
+    mergedSelection(): string[] {
+      return [...this.firstRowSelection, ...this.secondRowSelection];
+    }
+  },
+  watch: {
+    mergedSelection: {
+      handler(newSelection: string[]) {
+        this.$emit("update:modelValue", newSelection);
+      },
+      deep: true
+    }
   },
   methods: {
+    updateFirstRowSelection(value: string): void {
+      this.firstRowSelection.push(value);
+    },
+    updateSecondRowSelection(value: string): void {
+      this.secondRowSelection.push(value);
+    },
     update(ix: number, value: string): void {
       this.$emit("update:modelValue", this.modelValue.map((origVal, i) => (
         ix === i ? value : origVal
       )));
     },
     add(): void {
-      this.$emit("update:modelValue", [...this.modelValue, "identical"]);
+      this.$emit("update:modelValue", [...this.modelValue, this.modelValue?.[0] ?? "identical"]);
     },
     remove(ix: number): void {
       this.$emit("update:modelValue", this.modelValue.filter((_, i) => i !== ix));
@@ -56,17 +79,31 @@ export default defineComponent({
 
 <template>
   <Fieldset v-if="!showDetails" label="アウトライン">
-    <Space small>
-      <ToggleButton
-          v-for="option in options"
-          :key="option.value"
-          name="アウトライン"
-          :model-value="modelValue"
-          size="smallIcon"
-          :value="option.value"
-          @update:model-value="$emit('update:modelValue', $event)">
-        <ColorSample :color="option.absColor" />
-      </ToggleButton>
+    <Space vertical small>
+      <Space small>
+        <ToggleButton
+            v-for="option in options"
+            :key="option.value + '-1'"
+            name="アウトライン"
+            :model-value="firstRowSelection"
+            size="smallIcon"
+            :value="option.value"
+            @update:model-value="updateFirstRowSelection($event)">
+          <ColorSample :color="option.absColor" />
+        </ToggleButton>
+      </Space>
+      <Space small>
+        <ToggleButton
+            v-for="option in options"
+            :key="option.value + '-2'"
+            name="アウトライン"
+            :model-value="secondRowSelection"
+            size="smallIcon"
+            :value="option.value"
+            @update:model-value="updateSecondRowSelection($event)">
+          <ColorSample :color="option.absColor" />
+        </ToggleButton>
+      </Space>
     </Space>
   </Fieldset>
   <Fieldset v-else label="アウトライン">
@@ -76,7 +113,7 @@ export default defineComponent({
           :key="ix"
           :model-value="absColors[ix]"
           @update:model-value="update(ix, $event)"
-          @remove="remove(ix) " />
+          @remove="remove(ix)" />
       <Button type="dashed" name="アウトライン (追加)" block @click="add">
         + アウトラインを追加
       </Button>

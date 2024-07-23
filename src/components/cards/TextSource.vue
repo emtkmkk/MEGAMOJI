@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
+import axios from "axios";
 import Analytics from "../../utils/analytics";
 import FontSelectBlock from "../formblocks/FontSelectBlock.vue";
 import FontColorSelectBlock from "../formblocks/FontColorSelectBlock.vue";
@@ -50,9 +51,7 @@ export default defineComponent({
     show: { type: Boolean, required: true },
     emojiSize: { type: Number, default: 256 },
   },
-  emits: [
-    "render",
-  ],
+  emits: ["render"],
   data() {
     return {
       conf: {
@@ -77,6 +76,10 @@ export default defineComponent({
       /* internals */
       running: false,
       dirty: false,
+      originalHiragana: "",
+      renderTimeout: null as ReturnType<typeof setTimeout> | null,
+      nameTimeout: null as ReturnType<typeof setTimeout> | null,
+      errorReading: false,
     };
   },
   computed: {
@@ -85,27 +88,28 @@ export default defineComponent({
     },
     absoluteGradient(): { color: string, pos: number }[] {
       return this.conf.gradient.map((cs) => ({
-        color: absColor(cs.color, this.conf.color),
+        color: absColor(cs.color, this.conf.color)),
         pos: cs.pos,
       }));
     },
     currentFilename(): string {
-      const filename = this.conf.filename?.replace(/\n/g, "")
-        || jaToRoomaji(this.conf.content).replace(/\n/g, "");
-      return filename ? `${filename} .png` : "";
+      const filename = this.conf.filename?.replace(/\n/g, "");
+      const romaji = jaToRoomaji(this.originalHiragana || this.conf.content);
+      return filename ? `${filename}.png` : `${romaji}.png`;
     },
   },
   watch: {
     conf: {
       handler(): void {
         Analytics.changeFont(this.conf.font);
-        this.render(true);
+        this.scheduleRender();
+        this.scheduleNameUpdate();
       },
       deep: true,
     },
     emojiSize: {
       handler(): void {
-        this.render(true);
+        this.scheduleRender();
       },
     },
   },
@@ -113,6 +117,45 @@ export default defineComponent({
     Analytics.changeFont(this.conf.font);
   },
   methods: {
+    async getReading(text: string): Promise<string> {
+      try {
+        const response = await axios.post('https://www.google.com/transliterate', {
+          method: 'POST',
+          body: JSON.stringify([[text, 'ja-Hira']]),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const result = response.data;
+        return result[0][1][0]; // 返された読み仮名
+      } catch (error) {
+        console.error("Failed to get reading:", error);
+        this.errorReading = true;
+        return text; // 失敗した場合は入力テキストを返す
+      }
+    },
+    scheduleRender(): void {
+      clearTimeout(this.renderTimeout);
+      this.renderTimeout = setTimeout(this.render, 50);
+    },
+    scheduleNameUpdate(): void {
+      clearTimeout(this.nameTimeout);
+
+      if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９\s]+$/.test(this.conf.content) && !this.errorReading) {
+        this.nameTimeout = setTimeout(this.updateName, 2000);
+      } else {
+        this.updateName();
+      }
+    },
+    async updateName(): Promise<void> {
+      if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９\s]+$/.test(this.conf.content) && !this.errorReading) {
+        this.originalHiragana = await this.getReading(this.conf.content);
+      } else {
+        this.originalHiragana = this.conf.content;
+      }
+      this.render(); // 名前が変更された後に再レンダーを行う
+    },
+    async render(): Promise<void> {
     render(dirty?: boolean): void {
       if (dirty) {
         this.dirty = true;
@@ -122,6 +165,7 @@ export default defineComponent({
       }
       this.running = true;
       this.dirty = false;
+
       if (this.conf.content) {
         const canvas = makeTextImage(
           this.conf.content,
@@ -138,12 +182,12 @@ export default defineComponent({
           Number(this.conf.letterSpacing) || undefined,
           Number(this.conf.margin) || undefined,
         );
-        const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.conf.content).replace(/\n/g, "");
+        const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.originalHiragana).replace(/\n/g, "");
         this.$emit("render", canvas, name);
       }
+
       window.setTimeout(() => {
         this.running = false;
-        this.render();
       }, 50);
     },
   },
@@ -211,6 +255,12 @@ export default defineComponent({
                 :placeholder="currentFilename"
                 block />
           </Fieldset>
+          <Button
+              v-if="!conf.filename && currentFilename"
+              name="自動入力"
+              @click="conf.filename = currentFilename">
+            {{ "自動入力" }}
+          </Button>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
             <Number
                 v-model="conf.letterSpacing"

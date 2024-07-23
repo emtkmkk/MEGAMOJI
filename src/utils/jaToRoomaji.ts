@@ -205,8 +205,8 @@ export const table: { [key: string]: string } = {
 
 export function jaToRoomaji(str: string): string {
   // ひらがなかカタカナか全角半角英数字だけでなければ終了
-  if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９\s]+$/.test(str)) {
-    return str;
+  if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９]+$/.test(str)) {
+    return replaceNonConvertibles(str);
   }
 
   return hiraToRoma(kanaToHira(toHalfWidth(str)));
@@ -252,4 +252,8 @@ function toHalfWidth(str: string): string {
     (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0),
   );
   return replaceStr;
+}
+
+function replaceNonConvertibles(str: string): string {
+  return str.replace(/[^ぁ-んァ-ンー！？?A-Za-z0-9\s]/g, "_");
 }
