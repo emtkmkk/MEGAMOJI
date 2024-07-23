@@ -68,8 +68,10 @@ export default defineComponent({
       } else if (event.shiftKey || this.isLongPress || !this.token) {
         // Shiftキーが押されているか長押しの場合はトークンを再入力
         // eslint-disable-next-line no-alert
-        this.token = prompt("もこきーのトークンを入力（未入力可）:", "") || " ";
-        localStorage.setItem("google_form_token", this.token);
+        this.token = prompt("もこきーのトークンを入力（未入力可）:", "") || "";
+        if (this.token.length >= 10) {
+          localStorage.setItem("google_form_token", this.token);
+        }
         const filename = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
         const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfsYBpT1C6Ko3u7mu27Mr-1HKlp_wTsQQcXI3AFQGKeZAl53Q/viewform?usp=pp_url${this.token?.trim() ? `&entry.1795851707=${encodeURIComponent(this.token)}` : ""}&entry.2020474933=${encodeURIComponent(filename)}&entry.1422557821=%E6%96%87%E5%AD%97%E3%81%A0%E3%81%91%E3%81%AE%E7%B5%B5%E6%96%87%E5%AD%97%E3%81%AA%E3%81%AE%E3%81%A7%E4%B8%8D%E8%A6%81%EF%BC%88PD%EF%BC%89`;
         window.open(formUrl, "_blank");
@@ -96,7 +98,6 @@ export default defineComponent({
         clearTimeout(this.longPressTimeout);
         this.longPressTimeout = null;
       }
-      this.isLongPress = false;
     },
   },
 });
