@@ -26,7 +26,7 @@ export default defineComponent({
     return {
       firstRowSelection: [] as string[], // 1段目の選択
       secondRowSelection: [] as string[], // 2段目の選択
-      internalModelValue: this.modelValue, // 内部で使用するモデル値
+      isUpdatingSelections: false,
     };
   },
   computed: {
@@ -42,24 +42,15 @@ export default defineComponent({
       ];
     },
     absColors(): string[] {
-      return this.internalModelValue.map((color) => absColor(color, this.baseColor));
-    },
-    mergedSelection(): string[] {
-      return [...this.firstRowSelection, ...this.secondRowSelection];
+      return this.modelValue.map((color) => absColor(color, this.baseColor));
     },
   },
   watch: {
-    mergedSelection: {
-      handler(newSelection: string[]) {
-        this.internalModelValue = newSelection;
-        this.$emit("update:modelValue", newSelection);
-      },
-      deep: true,
-    },
     modelValue: {
       handler(newModelValue: string[]) {
-        this.internalModelValue = newModelValue;
-        this.updateSelections(newModelValue);
+        if (!this.isUpdatingSelections) {
+          this.updateSelections(newModelValue);
+        }
       },
       immediate: true,
       deep: true,
@@ -80,22 +71,32 @@ export default defineComponent({
         }
       });
     },
-    updateFirstRowSelection(value: string): void {
-      this.firstRowSelection.push(value);
+    updateFirstRowSelection(value: string[]): void {
+      this.isUpdatingSelections = true;
+      this.firstRowSelection = value;
+      this.updateMergedSelection();
     },
-    updateSecondRowSelection(value: string): void {
-      this.secondRowSelection.push(value);
+    updateSecondRowSelection(value: string[]): void {
+      this.isUpdatingSelections = true;
+      this.secondRowSelection = value;
+      this.updateMergedSelection();
+    },
+    updateMergedSelection(): void {
+      const newSelection = [...this.firstRowSelection, ...this.secondRowSelection];
+      this.$emit("update:modelValue", newSelection);
+      this.isUpdatingSelections = false;
     },
     update(ix: number, value: string): void {
-      this.$emit("update:modelValue", this.internalModelValue.map((origVal, i) => (
+      const newModelValue = this.modelValue.map((origVal, i) => (
         ix === i ? value : origVal
-      )));
+      ));
+      this.$emit("update:modelValue", newModelValue);
     },
     add(): void {
-      this.$emit("update:modelValue", [...this.internalModelValue, this.internalModelValue?.[0] ?? "identical"]);
+      this.$emit("update:modelValue", [...this.modelValue, this.modelValue?.[0] ?? "identical"]);
     },
     remove(ix: number): void {
-      this.$emit("update:modelValue", this.internalModelValue.filter((_, i) => i !== ix));
+      this.$emit("update:modelValue", this.modelValue.filter((_, i) => i !== ix));
     },
   },
 });
@@ -112,7 +113,7 @@ export default defineComponent({
             :model-value="firstRowSelection"
             size="smallIcon"
             :value="option.value"
-            @update:model-value="updateFirstRowSelection($event)">
+            @update:model-value="updateFirstRowSelection">
           <ColorSample :color="option.absColor" />
         </ToggleButton>
       </Space>
@@ -124,7 +125,7 @@ export default defineComponent({
             :model-value="secondRowSelection"
             size="smallIcon"
             :value="option.value"
-            @update:model-value="updateSecondRowSelection($event)">
+            @update:model-value="updateSecondRowSelection">
           <ColorSample :color="option.absColor" />
         </ToggleButton>
       </Space>
@@ -133,7 +134,7 @@ export default defineComponent({
   <Fieldset v-else label="アウトライン">
     <Space vertical full>
       <OutlineItemBlock
-          v-for="(color, ix) in internalModelValue"
+          v-for="(color, ix) in modelValue"
           :key="ix"
           :model-value="absColors[ix]"
           @update:model-value="update(ix, $event)"
