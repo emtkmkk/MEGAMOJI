@@ -14,6 +14,7 @@ import Input from "../inputs/Input.vue";
 import Space from "../global/Space.vue";
 import Card from "../global/Card.vue";
 import Grid from "../global/Grid.vue";
+import Button from "../inputs/Button.vue";
 import GridItem from "../global/GridItem.vue";
 import AlignJustify from "../icons/AlignJustify.vue";
 import AlignCenter from "../icons/AlignCenter.vue";
@@ -46,6 +47,7 @@ export default defineComponent({
     AlignCenter,
     AlignLeft,
     AlignRight,
+    Button,
   },
   props: {
     show: { type: Boolean, required: true },
@@ -102,14 +104,14 @@ export default defineComponent({
     conf: {
       handler(): void {
         Analytics.changeFont(this.conf.font);
-        this.scheduleRender();
+        this.render(true);
         this.scheduleNameUpdate();
       },
       deep: true,
     },
     emojiSize: {
       handler(): void {
-        this.scheduleRender();
+        this.render(true);
       },
     },
   },
@@ -119,9 +121,11 @@ export default defineComponent({
   methods: {
     async getReading(text: string): Promise<string> {
       try {
-        const response = await axios.post("https://www.google.com/transliterate", {
-          method: "POST",
-          body: JSON.stringify([[text, "ja-Hira"]]),
+        const response = await axios.get("https://www.google.com/transliterate", {
+          params: {
+            langpair: "ja-Hira",
+            text,
+          },
           headers: {
             "Content-Type": "application/json",
           },
@@ -132,10 +136,6 @@ export default defineComponent({
         this.errorReading = true;
         return text; // 失敗した場合は入力テキストを返す
       }
-    },
-    scheduleRender(): void {
-      if (this.renderTimeout) clearTimeout(this.renderTimeout);
-      this.renderTimeout = setTimeout(this.render, 50);
     },
     scheduleNameUpdate(): void {
       if (this.nameTimeout) clearTimeout(this.nameTimeout);
@@ -186,6 +186,7 @@ export default defineComponent({
 
       window.setTimeout(() => {
         this.running = false;
+        this.render();
       }, 50);
     },
   },

@@ -12,11 +12,12 @@ import Space from "../global/Space.vue";
 import Card from "../global/Card.vue";
 import Effect from "../icons/Effect.vue";
 import Back from "../icons/Back.vue";
+import Emoji from "../icons/Emoji.vue";
 import Save from "../icons/Save.vue";
 
 export default defineComponent({
   components: {
-    RawResult, Preview, Checkbox, Card, Space, Button, Effect, Back, Save,
+    RawResult, Preview, Checkbox, Card, Space, Button, Effect, Back, Save, Emoji,
   },
   props: {
     images: { type: Array as PropType<Blob[][]>, required: true },
