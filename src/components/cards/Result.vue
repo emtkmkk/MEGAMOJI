@@ -31,12 +31,26 @@ export default defineComponent({
     return {
       previewMode: false,
       token: localStorage.getItem("google_form_token") || "",
+      isShiftPressed: false, // Shiftキーが押されているかどうかを追跡するフラグ
+      isLongPress: false, // 長押しを追跡するフラグ
+      longPressTimeout: null as number | null, // 長押しタイマーのID
     };
   },
   computed: {
     resultImageUrls(): string[][] {
       return this.images.map((row) => row.map((cell) => URL.createObjectURL(cell)));
     },
+    openGoogleFormButtonText(): string {
+      return this.isShiftPressed || this.isLongPress ? "申請フォームを開く（トークン再入力）" : "申請フォームを開く";
+    },
+  },
+  mounted() {
+    window.addEventListener("keydown", this.handleKeyDown);
+    window.addEventListener("keyup", this.handleKeyUp);
+  },
+  beforeUnmount() {
+    window.removeEventListener("keydown", this.handleKeyDown);
+    window.removeEventListener("keyup", this.handleKeyUp);
   },
   methods: {
     onDownload(): void {
@@ -45,17 +59,44 @@ export default defineComponent({
       download.then((res) => saveAs(res, `${filename}.${extension(res)}`));
       Analytics.download();
     },
-    async openGoogleForm(): Promise<void> {
-      if (!this.token) {
+    async openGoogleForm(event: MouseEvent): Promise<void> {
+      if (!this.isLongPress && !event.shiftKey && this.token) {
+        // 長押しやShiftキーが押されていない場合のみ通常のフォームを開く
+        const filename = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
+        const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfsYBpT1C6Ko3u7mu27Mr-1HKlp_wTsQQcXI3AFQGKeZAl53Q/viewform?usp=pp_url${this.token?.trim() ? `&entry.1795851707=${encodeURIComponent(this.token)}` : ""}&entry.2020474933=${encodeURIComponent(filename)}&entry.1422557821=%E6%96%87%E5%AD%97%E3%81%A0%E3%81%91%E3%81%AE%E7%B5%B5%E6%96%87%E5%AD%97%E3%81%AA%E3%81%AE%E3%81%A7%E4%B8%8D%E8%A6%81%EF%BC%88PD%EF%BC%89`;
+        window.open(formUrl, "_blank");
+      } else if (event.shiftKey || this.isLongPress || !this.token) {
+        // Shiftキーが押されているか長押しの場合はトークンを再入力
         // eslint-disable-next-line no-alert
-        this.token = prompt("もこきーのトークンを入力（未入力可）:", "") || "";
+        this.token = prompt("もこきーのトークンを入力（未入力可）:", "") || " ";
         localStorage.setItem("google_form_token", this.token);
+        const filename = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
+        const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfsYBpT1C6Ko3u7mu27Mr-1HKlp_wTsQQcXI3AFQGKeZAl53Q/viewform?usp=pp_url${this.token?.trim() ? `&entry.1795851707=${encodeURIComponent(this.token)}` : ""}&entry.2020474933=${encodeURIComponent(filename)}&entry.1422557821=%E6%96%87%E5%AD%97%E3%81%A0%E3%81%91%E3%81%AE%E7%B5%B5%E6%96%87%E5%AD%97%E3%81%AA%E3%81%AE%E3%81%A7%E4%B8%8D%E8%A6%81%EF%BC%88PD%EF%BC%89`;
+        window.open(formUrl, "_blank");
       }
-
-      const filename = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
-      const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfsYBpT1C6Ko3u7mu27Mr-1HKlp_wTsQQcXI3AFQGKeZAl53Q/viewform?usp=pp_url${this.token ? `&entry.1795851707=${encodeURIComponent(this.token)}` : ""}&entry.2020474933=${encodeURIComponent(filename)}&entry.1422557821=%E6%96%87%E5%AD%97%E3%81%A0%E3%81%91%E3%81%AE%E7%B5%B5%E6%96%87%E5%AD%97%E3%81%AA%E3%81%AE%E3%81%A7%E4%B8%8D%E8%A6%81%EF%BC%88PD%EF%BC%89`;
-
-      window.open(formUrl, "_blank");
+      this.isLongPress = false; // フラグをリセット
+    },
+    handleKeyDown(event: KeyboardEvent): void {
+      if (event.key === "Shift") {
+        this.isShiftPressed = true;
+      }
+    },
+    handleKeyUp(event: KeyboardEvent): void {
+      if (event.key === "Shift") {
+        this.isShiftPressed = false;
+      }
+    },
+    startLongPress(): void {
+      this.longPressTimeout = window.setTimeout(() => {
+        this.isLongPress = true;
+      }, 3000); // 3秒以上の長押しでトークン再入力モードに切り替え
+    },
+    cancelLongPress(): void {
+      if (this.longPressTimeout) {
+        clearTimeout(this.longPressTimeout);
+        this.longPressTimeout = null;
+      }
+      this.isLongPress = false;
     },
   },
 });
@@ -98,11 +139,17 @@ export default defineComponent({
         </template>
         絵文字を保存
       </Button>
-      <Button type="primary" name="申請フォームを開く" @click="openGoogleForm">
+      <Button type="primary"
+              :name="openGoogleFormButtonText"
+              @click="openGoogleForm"
+              @mousedown="startLongPress"
+              @touchstart="startLongPress"
+              @mouseup="cancelLongPress"
+              @touchend="cancelLongPress">
         <template #icon>
           <Emoji />
         </template>
-        申請フォームを開く
+        {{ openGoogleFormButtonText }}
       </Button>
     </Space>
   </Space>

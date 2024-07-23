@@ -98,6 +98,11 @@ export default defineComponent({
       const romaji = jaToRoomaji(this.conf.content);
       return filename ? `${filename}.png` : `${romaji}.png`;
     },
+    currentFilename2(): string {
+      const filename = this.conf.filename?.replace(/\n/g, "");
+      const romaji = jaToRoomaji(this.conf.content);
+      return filename || romaji;
+    },
   },
   watch: {
     conf: {
@@ -242,7 +247,7 @@ export default defineComponent({
           <Button
               v-if="showDetails && !conf.filename && currentFilename"
               name="自動入力"
-              @click="conf.filename = jaToRoomaji(conf.content)">
+              @click="conf.filename = currentFilename2">
             {{ "自動入力" }}
           </Button>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
