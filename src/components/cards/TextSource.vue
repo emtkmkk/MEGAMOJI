@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import axios from "axios";
 import Analytics from "../../utils/analytics";
 import FontSelectBlock from "../formblocks/FontSelectBlock.vue";
 import FontColorSelectBlock from "../formblocks/FontColorSelectBlock.vue";
@@ -121,17 +120,8 @@ export default defineComponent({
   methods: {
     async getReading(text: string): Promise<string> {
       try {
-        const response = await axios.get("https://www.google.com/transliterate", {
-          params: {
-            langpair: "ja-Hira",
-            text,
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const result = response.data;
-        return result[0][1][0]; // 返された読み仮名
+        this.errorReading = true;
+        return text; // 入力テキストを返す
       } catch (error) {
         this.errorReading = true;
         return text; // 失敗した場合は入力テキストを返す
