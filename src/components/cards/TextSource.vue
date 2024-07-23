@@ -95,7 +95,7 @@ export default defineComponent({
     },
     currentFilename(): string {
       const filename = this.conf.filename?.replace(/\n/g, "");
-      const romaji = jaToRoomaji(this.originalHiragana || this.conf.content);
+      const romaji = jaToRoomaji(this.conf.content);
       return filename ? `${filename}.png` : `${romaji}.png`;
     },
   },
@@ -130,19 +130,14 @@ export default defineComponent({
     scheduleNameUpdate(): void {
       if (this.nameTimeout) clearTimeout(this.nameTimeout);
 
-      if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９\s]+$/.test(this.conf.content) && !this.errorReading) {
-        this.nameTimeout = setTimeout(this.updateName, 2000);
+      if (!this.errorReading) {
+        this.updateName();
       } else {
         this.updateName();
       }
     },
     async updateName(): Promise<void> {
-      if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９\s]+$/.test(this.conf.content) && !this.errorReading) {
-        this.originalHiragana = await this.getReading(this.conf.content);
-      } else {
-        this.originalHiragana = this.conf.content;
-      }
-      this.render(); // 名前が変更された後に再レンダーを行う
+      this.render();
     },
     render(dirty?: boolean): void {
       if (dirty) {
@@ -170,7 +165,7 @@ export default defineComponent({
           Number(this.conf.letterSpacing) || undefined,
           Number(this.conf.margin) || undefined,
         );
-        const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.originalHiragana).replace(/\n/g, "");
+        const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.conf.content).replace(/\n/g, "");
         this.$emit("render", canvas, name);
       }
 
@@ -245,9 +240,9 @@ export default defineComponent({
                 block />
           </Fieldset>
           <Button
-              v-if="!conf.filename && currentFilename"
+              v-if="showDetails && !conf.filename && currentFilename"
               name="自動入力"
-              @click="conf.filename = currentFilename">
+              @click="conf.filename = jaToRoomaji(conf.content)">
             {{ "自動入力" }}
           </Button>
           <Fieldset v-if="showDetails" label="字間 (文字分)">
