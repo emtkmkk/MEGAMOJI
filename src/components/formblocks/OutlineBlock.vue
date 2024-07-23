@@ -50,7 +50,10 @@ export default defineComponent({
   watch: {
     mergedSelection: {
       handler(newSelection: string[]) {
-        this.$emit("update:modelValue", newSelection);
+        this.modelValue = newSelection;
+        this.$emit("update:modelValue", newSelection.map((origVal, i) => (
+          ix === i ? value : origVal
+        )));
       },
       deep: true,
     },
