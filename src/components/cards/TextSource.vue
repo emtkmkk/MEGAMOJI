@@ -134,11 +134,11 @@ export default defineComponent({
       }
     },
     scheduleRender(): void {
-      clearTimeout(this.renderTimeout);
+      if(this.renderTimeout) clearTimeout(this.renderTimeout);
       this.renderTimeout = setTimeout(this.render, 50);
     },
     scheduleNameUpdate(): void {
-      clearTimeout(this.nameTimeout);
+      if(this.nameTimeout) clearTimeout(this.nameTimeout);
 
       if (!/^[ぁ-んァ-ンー！？?A-Za-z0-9Ａ-Ｚａ-ｚ０-９\s]+$/.test(this.conf.content) && !this.errorReading) {
         this.nameTimeout = setTimeout(this.updateName, 2000);
