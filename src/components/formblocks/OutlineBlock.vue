@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, watch } from "vue";
 import Button from "../inputs/Button.vue";
 import ToggleButton from "../inputs/ToggleButton.vue";
 import Fieldset from "../inputs/Fieldset.vue";
@@ -26,6 +26,7 @@ export default defineComponent({
     return {
       firstRowSelection: [] as string[], // 1段目の選択
       secondRowSelection: [] as string[], // 2段目の選択
+      internalModelValue: this.modelValue, // 内部で使用するモデル値
     };
   },
   computed: {
@@ -41,7 +42,7 @@ export default defineComponent({
       ];
     },
     absColors(): string[] {
-      return this.modelValue.map((color) => absColor(color, this.baseColor));
+      return this.internalModelValue.map((color) => absColor(color, this.baseColor));
     },
     mergedSelection(): string[] {
       return [...this.firstRowSelection, ...this.secondRowSelection];
@@ -50,15 +51,35 @@ export default defineComponent({
   watch: {
     mergedSelection: {
       handler(newSelection: string[]) {
-        this.modelValue = newSelection;
-        this.$emit("update:modelValue", newSelection.map((origVal, i) => (
-          ix === i ? value : origVal
-        )));
+        this.internalModelValue = newSelection;
+        this.$emit("update:modelValue", newSelection);
       },
+      deep: true,
+    },
+    modelValue: {
+      handler(newModelValue: string[]) {
+        this.internalModelValue = newModelValue;
+        this.updateSelections(newModelValue);
+      },
+      immediate: true,
       deep: true,
     },
   },
   methods: {
+    updateSelections(newModelValue: string[]): void {
+      // 選択をリセット
+      this.firstRowSelection = [];
+      this.secondRowSelection = [];
+
+      // 新しい値を割り当てる
+      newModelValue.forEach((value) => {
+        if (!this.firstRowSelection.includes(value)) {
+          this.firstRowSelection.push(value);
+        } else {
+          this.secondRowSelection.push(value);
+        }
+      });
+    },
     updateFirstRowSelection(value: string): void {
       this.firstRowSelection.push(value);
     },
@@ -66,15 +87,15 @@ export default defineComponent({
       this.secondRowSelection.push(value);
     },
     update(ix: number, value: string): void {
-      this.$emit("update:modelValue", this.modelValue.map((origVal, i) => (
+      this.$emit("update:modelValue", this.internalModelValue.map((origVal, i) => (
         ix === i ? value : origVal
       )));
     },
     add(): void {
-      this.$emit("update:modelValue", [...this.modelValue, this.modelValue?.[0] ?? "identical"]);
+      this.$emit("update:modelValue", [...this.internalModelValue, this.internalModelValue?.[0] ?? "identical"]);
     },
     remove(ix: number): void {
-      this.$emit("update:modelValue", this.modelValue.filter((_, i) => i !== ix));
+      this.$emit("update:modelValue", this.internalModelValue.filter((_, i) => i !== ix));
     },
   },
 });
@@ -112,7 +133,7 @@ export default defineComponent({
   <Fieldset v-else label="アウトライン">
     <Space vertical full>
       <OutlineItemBlock
-          v-for="(color, ix) in modelValue"
+          v-for="(color, ix) in internalModelValue"
           :key="ix"
           :model-value="absColors[ix]"
           @update:model-value="update(ix, $event)"
