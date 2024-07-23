@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "@types/gtag.js": "^0.0.12",
+    "axios": "^1.7.2",
     "color-convert": "^2.0.1",
     "file-saver": "^2.0.5",
     "filenamify": "^6.0.0",

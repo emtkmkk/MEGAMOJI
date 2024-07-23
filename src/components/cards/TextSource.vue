@@ -88,7 +88,7 @@ export default defineComponent({
     },
     absoluteGradient(): { color: string, pos: number }[] {
       return this.conf.gradient.map((cs) => ({
-        color: absColor(cs.color, this.conf.color)),
+        color: absColor(cs.color, this.conf.color),
         pos: cs.pos,
       }));
     },
@@ -119,17 +119,16 @@ export default defineComponent({
   methods: {
     async getReading(text: string): Promise<string> {
       try {
-        const response = await axios.post('https://www.google.com/transliterate', {
-          method: 'POST',
-          body: JSON.stringify([[text, 'ja-Hira']]),
+        const response = await axios.post("https://www.google.com/transliterate", {
+          method: "POST",
+          body: JSON.stringify([[text, "ja-Hira"]]),
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
         const result = response.data;
         return result[0][1][0]; // 返された読み仮名
       } catch (error) {
-        console.error("Failed to get reading:", error);
         this.errorReading = true;
         return text; // 失敗した場合は入力テキストを返す
       }
@@ -155,7 +154,6 @@ export default defineComponent({
       }
       this.render(); // 名前が変更された後に再レンダーを行う
     },
-    async render(): Promise<void> {
     render(dirty?: boolean): void {
       if (dirty) {
         this.dirty = true;

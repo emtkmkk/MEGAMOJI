@@ -45,15 +45,15 @@ export default defineComponent({
     },
     mergedSelection(): string[] {
       return [...this.firstRowSelection, ...this.secondRowSelection];
-    }
+    },
   },
   watch: {
     mergedSelection: {
       handler(newSelection: string[]) {
         this.$emit("update:modelValue", newSelection);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     updateFirstRowSelection(value: string): void {
