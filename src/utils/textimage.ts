@@ -202,7 +202,9 @@ const makeTextImageSingleLineMonospace = (
   const resolvedLetterSpacingPx = letterSpacingPx ?? 0;
   const cellAdvance = cellWidth + resolvedLetterSpacingPx;
   const marginPx = fontHeight * (margin ?? 0.025);
-  const lineWidth = (cellWidth * chars.length) + (resolvedLetterSpacingPx * (chars.length - 1)) + marginPx * 2;
+  const lineWidth = (cellWidth * chars.length)
+    + (resolvedLetterSpacingPx * (chars.length - 1))
+    + marginPx * 2;
 
   const canvas = document.createElement("canvas");
   canvas.width = Math.ceil(lineWidth + fontHeight);
