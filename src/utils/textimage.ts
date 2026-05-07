@@ -37,6 +37,11 @@ const measureCharWidths = (
   });
 };
 
+const toLetterSpacingPixels = (
+  letterSpacing: number | undefined,
+  fontHeight: number,
+): number => Math.round((letterSpacing ?? 0) * fontHeight);
+
 const getGradientPoint = (
   width: number,
   height: number,
@@ -114,13 +119,14 @@ const makeTextImageSingleLine = (
   gradient: GradientColorStop[],
   gradientPos?: number[],
   gradientMarker?: boolean,
-  letterSpacing?: number,
+  letterSpacingPx?: number,
   margin?: number,
 ): HTMLCanvasElement => {
   const canvas = document.createElement("canvas");
   canvas.width = fontHeight * (line.length || 1) * 2;
   canvas.height = fontHeight * 2;
-  canvas.style.letterSpacing = letterSpacing ? `${Math.round(letterSpacing * fontHeight)}px` : "";
+  const resolvedLetterSpacingPx = letterSpacingPx ?? 0;
+  canvas.style.letterSpacing = resolvedLetterSpacingPx ? `${resolvedLetterSpacingPx}px` : "";
 
   const ctx = canvas.getContext("2d");
   if (!ctx) {
@@ -132,7 +138,7 @@ const makeTextImageSingleLine = (
   ctx.lineJoin = "round";
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  ctx.letterSpacing = letterSpacing ? `${Math.round(letterSpacing * fontHeight)}px` : "";
+  ctx.letterSpacing = resolvedLetterSpacingPx ? `${resolvedLetterSpacingPx}px` : "";
 
   const marginPx = fontHeight * (margin ?? 0.025);
 
@@ -186,14 +192,17 @@ const makeTextImageSingleLineMonospace = (
   margin?: number,
   cellAlign?: CellAlign,
   forcedCellWidth?: number,
+  letterSpacingPx?: number,
 ): HTMLCanvasElement => {
   const resolvedCellAlign = cellAlign || "center";
   const chars = Array.from(line || " ");
   const measuredCharWidths = measureCharWidths(chars.join(""), font, fontHeight);
   const maxMeasuredWidth = Math.max(...measuredCharWidths, fontHeight, 1);
   const cellWidth = Math.max(forcedCellWidth ?? maxMeasuredWidth, 1);
+  const resolvedLetterSpacingPx = letterSpacingPx ?? 0;
+  const cellAdvance = cellWidth + resolvedLetterSpacingPx;
   const marginPx = fontHeight * (margin ?? 0.025);
-  const lineWidth = cellWidth * chars.length + marginPx * 2;
+  const lineWidth = (cellWidth * chars.length) + (resolvedLetterSpacingPx * (chars.length - 1)) + marginPx * 2;
 
   const canvas = document.createElement("canvas");
   canvas.width = Math.ceil(lineWidth + fontHeight);
@@ -229,7 +238,7 @@ const makeTextImageSingleLineMonospace = (
 
   chars.forEach((char, index) => {
     const charWidth = measuredCharWidths[index] || 1;
-    const cellStartX = marginPx + (index * cellWidth);
+    const cellStartX = marginPx + (index * cellAdvance);
     const offsetX = resolvedCellAlign === "left" ? 0
       : resolvedCellAlign === "right" ? cellWidth - charWidth
         : resolvedCellAlign === "justify" ? 0
@@ -316,6 +325,7 @@ export const makeTextImage = (
 ): HTMLCanvasElement => {
   const lineSpacingPixels = Math.round(lineSpacing * fontHeight);
   const paddingPixels = Math.round(padding * fontHeight);
+  const letterSpacingPx = toLetterSpacingPixels(letterSpacing, fontHeight);
 
   const lines = text.split("\n");
   let globalCellWidth: number | undefined;
@@ -342,6 +352,7 @@ export const makeTextImage = (
         margin,
         cellAlign,
         globalCellWidth,
+        letterSpacingPx,
       )
       : makeTextImageSingleLine(
         line,
@@ -352,7 +363,7 @@ export const makeTextImage = (
         gradient,
         gradientPos,
         gradientMarker,
-        letterSpacing,
+        letterSpacingPx,
         margin,
       )
   ));
