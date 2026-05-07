@@ -111,9 +111,10 @@ const makeTextImageSingleLineMonospace = (
   gradientPos?: number[],
   gradientMarker?: boolean,
   margin?: number,
-  cellAlign: CellAlign = "center",
+  cellAlign?: CellAlign,
   forcedCellWidth?: number,
 ): HTMLCanvasElement => {
+  const resolvedCellAlign = cellAlign || "center";
   const chars = Array.from(line || " ");
   const measuredCharWidths = measureCharWidths(chars.join(""), font, fontHeight);
   const maxMeasuredWidth = Math.max(...measuredCharWidths, fontHeight, 1);
@@ -170,15 +171,15 @@ const makeTextImageSingleLineMonospace = (
   chars.forEach((char, index) => {
     const charWidth = measuredCharWidths[index] || 1;
     const cellStartX = marginPx + (index * cellWidth);
-    const offsetX = cellAlign === "left" ? 0
-      : cellAlign === "right" ? cellWidth - charWidth
-        : cellAlign === "justify" ? 0
+    const offsetX = resolvedCellAlign === "left" ? 0
+      : resolvedCellAlign === "right" ? cellWidth - charWidth
+        : resolvedCellAlign === "justify" ? 0
           : (cellWidth - charWidth) / 2;
     const drawX = cellStartX + Math.max(offsetX, 0);
 
     for (let i = outlineColors.length - 1; i >= 0; i -= 1) {
       ctx.save();
-      if (cellAlign === "justify" && charWidth > 0) {
+      if (resolvedCellAlign === "justify" && charWidth > 0) {
         const scaleX = cellWidth / charWidth;
         ctx.translate(cellStartX, 0);
         ctx.scale(scaleX, 1);
@@ -194,7 +195,7 @@ const makeTextImageSingleLineMonospace = (
     }
 
     ctx.save();
-    if (cellAlign === "justify" && charWidth > 0) {
+    if (resolvedCellAlign === "justify" && charWidth > 0) {
       const scaleX = cellWidth / charWidth;
       ctx.translate(cellStartX, 0);
       ctx.scale(scaleX, 1);
