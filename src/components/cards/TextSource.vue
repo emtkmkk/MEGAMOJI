@@ -70,6 +70,7 @@ export default defineComponent({
         padding: 0,
         letterSpacing: 0,
         margin: 0.025,
+        fixedCharacterWidth: false,
         filename: "",
         fontReady: false,
       },
@@ -169,6 +170,7 @@ export default defineComponent({
           this.conf.gradientMarker,
           Number(this.conf.letterSpacing) || undefined,
           Number(this.conf.margin) || undefined,
+          this.conf.fixedCharacterWidth,
         );
         const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.conf.content).replace(/\n/g, "");
         this.$emit("render", canvas, name);
@@ -257,6 +259,11 @@ export default defineComponent({
                 :min="-3"
                 :max="3"
                 :step="0.01" />
+          </Fieldset>
+          <Fieldset v-if="showDetails" label="文字等幅モード">
+            <Checkbox v-model="conf.fixedCharacterWidth" name="文字等幅モード">
+              {{ "文字ごとの幅を均等にする" }}
+            </Checkbox>
           </Fieldset>
           <Fieldset v-if="showDetails" label="行間 (文字分)">
             <Number
