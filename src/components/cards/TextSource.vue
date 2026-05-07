@@ -173,8 +173,8 @@ export default defineComponent({
           Number(this.conf.letterSpacing) || undefined,
           Number(this.conf.margin) || undefined,
           this.conf.monospaceLayoutEnabled,
-          this.conf.cellAlign,
-          this.conf.cellWidthBasis,
+          this.conf.cellAlign as "left" | "center" | "right" | "justify",
+          this.conf.cellWidthBasis as "line" | "global",
         );
         const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.conf.content).replace(/\n/g, "");
         this.$emit("render", canvas, name);

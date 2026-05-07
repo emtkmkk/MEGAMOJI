@@ -233,7 +233,10 @@ export const makeTextImage = (
   const lines = text.split("\n");
   let globalCellWidth: number | undefined;
   if (monospaceLayoutEnabled && cellWidthBasis === "global") {
-    const globalChars = lines.flatMap((line) => Array.from(line || " "));
+    const globalChars = lines.reduce<string[]>((acc, line) => {
+      acc.push(...Array.from(line || " "));
+      return acc;
+    }, []);
     const globalCharWidths = measureCharWidths(globalChars.join(""), font, fontHeight);
     globalCellWidth = Math.max(...globalCharWidths, fontHeight, 1);
   }
