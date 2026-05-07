@@ -29,7 +29,12 @@ const measureCharWidths = (
 ): number[] => {
   const ctx = createMeasureContext(font, fontHeight);
   const chars = Array.from(text || " ");
-  return chars.map((char) => Math.max(ctx.measureText(char).width, 1));
+  return chars.map((char) => {
+    if (char === " " || char === "　") {
+      return 1;
+    }
+    return Math.max(ctx.measureText(char).width, 1);
+  });
 };
 
 const getGradientPoint = (
