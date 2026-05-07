@@ -206,7 +206,7 @@ const makeTextImageSingleLineMonospace = (
     ctx.restore();
   });
 
-  return shrinkCanvas(canvas);
+  return canvas;
 };
 
 /* Create an image from a (possibly) multi-line text and return as a BlobURL. */
