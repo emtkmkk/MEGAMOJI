@@ -212,7 +212,7 @@ export function jaToRoomaji(str: string): string {
   return hiraToRoma(kanaToHira(toHalfWidth(str)));
 }
 
-function kanaToHira(str: string): string {
+export function kanaToHira(str: string): string {
   return str.replace(/[ァ-ン]/g, (match) => {
     const chr = match.charCodeAt(0) - 0x60;
     return String.fromCharCode(chr);

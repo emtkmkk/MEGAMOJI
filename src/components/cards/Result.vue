@@ -15,6 +15,15 @@ import Back from "../icons/Back.vue";
 import Emoji from "../icons/Emoji.vue";
 import Save from "../icons/Save.vue";
 
+/** もこきーの送り先。申請ページを開き、ここにだけ postMessage する */
+const MKKEY_ORIGIN = "https://mkkey.net";
+
+type RequestFields = {
+  name?: string;
+  alternateName?: string;
+  ruby?: string;
+};
+
 export default defineComponent({
   components: {
     RawResult, Preview, Checkbox, Card, Space, Button, Effect, Back, Save, Emoji,
@@ -22,6 +31,10 @@ export default defineComponent({
   props: {
     images: { type: Array as PropType<Blob[][]>, required: true },
     name: { type: String, default: null },
+    /** 絵文字にした元の文字（テキストモードのときだけ） */
+    content: { type: String, default: null },
+    /** 推測した読み（ひらがな）。分からないときは null */
+    ruby: { type: String, default: null },
     showTarget: { type: Boolean, required: false },
   },
   emits: [
@@ -30,27 +43,15 @@ export default defineComponent({
   data() {
     return {
       previewMode: false,
-      token: localStorage.getItem("google_form_token") || "",
-      isShiftPressed: false, // Shiftキーが押されているかどうかを追跡するフラグ
-      isLongPress: false, // 長押しを追跡するフラグ
-      longPressTimeout: null as number | null, // 長押しタイマーのID
     };
   },
   computed: {
     resultImageUrls(): string[][] {
       return this.images.map((row) => row.map((cell) => URL.createObjectURL(cell)));
     },
-    openGoogleFormButtonText(): string {
-      return this.isShiftPressed || this.isLongPress ? "申請フォームを開く（トークン再入力）" : "申請フォームを開く";
+    isSingleImage(): boolean {
+      return this.images.length === 1 && this.images[0].length === 1;
     },
-  },
-  mounted() {
-    window.addEventListener("keydown", this.handleKeyDown);
-    window.addEventListener("keyup", this.handleKeyUp);
-  },
-  beforeUnmount() {
-    window.removeEventListener("keydown", this.handleKeyDown);
-    window.removeEventListener("keyup", this.handleKeyUp);
   },
   methods: {
     onDownload(): void {
@@ -59,45 +60,47 @@ export default defineComponent({
       download.then((res) => saveAs(res, `${filename}.${extension(res)}`));
       Analytics.download();
     },
-    async openGoogleForm(event: MouseEvent): Promise<void> {
-      if (!this.isLongPress && !event.shiftKey && this.token) {
-        // 長押しやShiftキーが押されていない場合のみ通常のフォームを開く
-        const filename = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
-        const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfsYBpT1C6Ko3u7mu27Mr-1HKlp_wTsQQcXI3AFQGKeZAl53Q/viewform?usp=pp_url${this.token?.trim() ? `&entry.1795851707=${encodeURIComponent(this.token)}` : ""}&entry.2020474933=${encodeURIComponent(filename)}&entry.1422557821=%E6%96%87%E5%AD%97%E3%81%A0%E3%81%91%E3%81%AE%E7%B5%B5%E6%96%87%E5%AD%97%E3%81%AA%E3%81%AE%E3%81%A7%E4%B8%8D%E8%A6%81%EF%BC%88PD%EF%BC%89`;
-        window.open(formUrl, "_blank");
-      } else if (event.shiftKey || this.isLongPress || !this.token) {
-        // Shiftキーが押されているか長押しの場合はトークンを再入力
+    buildFields(): RequestFields {
+      const fields: RequestFields = {};
+      const name = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
+      if (name) fields.name = name;
+      if (this.content) {
+        const alternateName = this.content.replace(/\n/g, "").trim();
+        if (alternateName) fields.alternateName = alternateName;
+        if (this.ruby) fields.ruby = this.ruby;
+      }
+      return fields;
+    },
+    openRequestPage(): void {
+      if (!this.isSingleImage) return;
+      const image = this.images[0][0];
+      const fields = this.buildFields();
+
+      const query = new URLSearchParams({ from: "megamoji" });
+      Object.entries(fields).forEach(([k, v]) => {
+        if (v) query.set(k, v);
+      });
+      // noopener を付けると window.opener が無くなり、準備の合図が届かない
+      const win = window.open(`${MKKEY_ORIGIN}/emoji-requests/new?${query}`, "_blank");
+      if (win == null) {
         // eslint-disable-next-line no-alert
-        this.token = prompt("もこきーのトークンを入力（未入力可）:", "") || "";
-        if (this.token.length >= 10) {
-          localStorage.setItem("google_form_token", this.token);
+        alert("ポップアップを許可してから、もう一度押してください");
+        return;
+      }
+
+      const onMessage = (ev: MessageEvent): void => {
+        if (ev.origin !== MKKEY_ORIGIN || ev.source !== win) return;
+        if (ev.data?.type !== "mkkey:emoji-request:ready") return;
+        // 合図が来るたびに送る（ログイン後に開き直されたときのため）
+        win.postMessage({ type: "mkkey:emoji-request:image", image, fields }, MKKEY_ORIGIN);
+      };
+      window.addEventListener("message", onMessage);
+      const timer = window.setInterval(() => {
+        if (win.closed) {
+          window.removeEventListener("message", onMessage);
+          window.clearInterval(timer);
         }
-        const filename = filenamify(this.name ?? "", { replacement: "" }).normalize().replace(/\.[^/.]+$/, "");
-        const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfsYBpT1C6Ko3u7mu27Mr-1HKlp_wTsQQcXI3AFQGKeZAl53Q/viewform?usp=pp_url${this.token?.trim() ? `&entry.1795851707=${encodeURIComponent(this.token)}` : ""}&entry.2020474933=${encodeURIComponent(filename)}&entry.1422557821=%E6%96%87%E5%AD%97%E3%81%A0%E3%81%91%E3%81%AE%E7%B5%B5%E6%96%87%E5%AD%97%E3%81%AA%E3%81%AE%E3%81%A7%E4%B8%8D%E8%A6%81%EF%BC%88PD%EF%BC%89`;
-        window.open(formUrl, "_blank");
-      }
-      this.isLongPress = false; // フラグをリセット
-    },
-    handleKeyDown(event: KeyboardEvent): void {
-      if (event.key === "Shift") {
-        this.isShiftPressed = true;
-      }
-    },
-    handleKeyUp(event: KeyboardEvent): void {
-      if (event.key === "Shift") {
-        this.isShiftPressed = false;
-      }
-    },
-    startLongPress(): void {
-      this.longPressTimeout = window.setTimeout(() => {
-        this.isLongPress = true;
-      }, 3000); // 3秒以上の長押しでトークン再入力モードに切り替え
-    },
-    cancelLongPress(): void {
-      if (this.longPressTimeout) {
-        clearTimeout(this.longPressTimeout);
-        this.longPressTimeout = null;
-      }
+      }, 1000);
     },
   },
 });
@@ -140,17 +143,14 @@ export default defineComponent({
         </template>
         絵文字を保存
       </Button>
-      <Button type="primary"
-              :name="openGoogleFormButtonText"
-              @click="openGoogleForm"
-              @mousedown="startLongPress"
-              @touchstart="startLongPress"
-              @mouseup="cancelLongPress"
-              @touchend="cancelLongPress">
+      <Button v-if="isSingleImage"
+              type="primary"
+              name="もこきーに申請"
+              @click="openRequestPage">
         <template #icon>
           <Emoji />
         </template>
-        {{ openGoogleFormButtonText }}
+        もこきーに申請
       </Button>
     </Space>
   </Space>
