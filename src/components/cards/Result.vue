@@ -143,9 +143,9 @@ export default defineComponent({
         </template>
         絵文字を保存
       </Button>
-      <Button type="primary"
+      <Button v-if="isSingleImage"
+              type="primary"
               name="もこきーに申請"
-              :disabled="!isSingleImage"
               @click="openRequestPage">
         <template #icon>
           <Emoji />
@@ -153,18 +153,10 @@ export default defineComponent({
         もこきーに申請
       </Button>
     </Space>
-    <p v-if="!isSingleImage" class="notice">
-      分割した絵文字はまとめて申請できません。1 枚ずつ保存して申請してください
-    </p>
   </Space>
 </template>
 
 <style scoped>
-.notice {
-  margin: 0;
-  font-size: 0.9em;
-}
-
 .result {
   background-image:
     linear-gradient(

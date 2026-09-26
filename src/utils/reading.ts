@@ -30,46 +30,43 @@ function getTokenizer(): Promise<Tokenizer<IpadicFeatures>> {
 
 export type Reading = {
   /**
-   * 読めるところを読みにし、読めないところ（英字・記号など）はそのまま残したもの。
-   * ファイル名を作るのに使う
+   * 漢字を読みに直したもの（読めないところはそのまま）。ファイル名を作るのに使う。
+   * 漢字が無いとき、または辞書が読み込めなかったときは null（入力をそのままローマ字にする）
    */
-  text: string;
-  /** すべてひらがなにできたときだけ、そのひらがな。読みの欄に入れる */
-  ruby: string | null;
+  name: string | null;
+  /**
+   * 読みの欄に入れるもの。読めるところはひらがなにし、英字・記号などはそのまま残す。
+   * 読めないところが残っていても入れる（要らなければ申請する人が消す）
+   */
+  ruby: string;
 };
 
 /**
  * 入力した文字から読みを推測する。改行と空白は取り除く。
- * かなだけのときは辞書を読み込まずにそのまま返す。漢字が無く読みようがないときは null を返す。
- * 辞書が読み込めないときも null を返す。
+ * 漢字が無いときは辞書を読み込まず、かなをひらがなにしただけのものを返す。
+ * 空のときだけ null を返す。
  */
 export async function guessReading(content: string): Promise<Reading | null> {
   const text = content.replace(/[\s\u3000]/g, "");
   if (!text) return null;
-  if (KANA_ONLY.test(text)) {
-    const ruby = kanaToHira(text);
-    return { text: ruby, ruby };
-  }
-  if (!HAS_KANJI.test(text)) return null;
+  const plain: Reading = { name: null, ruby: kanaToHira(text) };
+  if (!HAS_KANJI.test(text)) return plain;
 
   let tokenizer: Tokenizer<IpadicFeatures>;
   try {
     tokenizer = await getTokenizer();
   } catch {
-    return null;
+    return plain;
   }
 
-  let complete = true;
-  const parts = tokenizer.tokenize(text).map((token) => {
+  const joined = tokenizer.tokenize(text).map((token) => {
     const surface = token.surface_form;
     // かなはそのまま使う（辞書の読みだと表記が変わることがあるため）
     if (KANA_ONLY.test(surface)) return kanaToHira(surface);
     if (token.reading && token.reading !== "*" && KANA_ONLY.test(token.reading)) {
       return kanaToHira(token.reading);
     }
-    complete = false;
     return surface;
-  });
-  const joined = parts.join("");
-  return { text: joined, ruby: complete ? joined : null };
+  }).join("");
+  return { name: joined, ruby: joined };
 }

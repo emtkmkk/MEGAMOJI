@@ -105,7 +105,7 @@ export default defineComponent({
     },
     autoFilename(): string {
       // 読みが推測できていれば、読みをローマ字にする
-      return jaToRoomaji(this.currentReading?.text ?? this.conf.content).replace(/\n/g, "");
+      return jaToRoomaji(this.currentReading?.name ?? this.conf.content).replace(/\n/g, "");
     },
     currentFilename(): string {
       const filename = this.conf.filename?.replace(/\n/g, "");
