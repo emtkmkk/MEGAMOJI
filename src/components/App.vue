@@ -42,6 +42,8 @@ export default defineComponent({
     return {
       baseImage: null as (HTMLImageElement | HTMLCanvasElement | null),
       name: null as (string | null),
+      content: null as (string | null),
+      ruby: null as (string | null),
       resultImages: [[]] as Blob[][],
       previewMode: false,
       emojiSize: 256 as (number | null),
@@ -55,6 +57,12 @@ export default defineComponent({
   },
   mounted() {
     Analytics.switchMode("text");
+    // Google フォーム申請用に保存していたトークン。もう使わないので消す
+    try {
+      localStorage.removeItem("google_form_token");
+    } catch {
+      // localStorage が使えない環境では何もしない
+    }
   },
   methods: {
     onToggleShowTarget(): void {
@@ -64,15 +72,25 @@ export default defineComponent({
     onSelectMode(value: string): void {
       this.ui.mode = value;
       this.ui.showTargetPanel = false;
+      this.content = null;
+      this.ruby = null;
       Analytics.switchMode(value, true);
     },
     onRenderTarget(imgs: Blob[][]): void {
       this.resultImages = imgs;
       Analytics.render();
     },
-    onRender(img: HTMLImageElement, name: string): void {
+    onRender(img: HTMLImageElement, name: string, content?: string, ruby?: string | null): void {
       this.baseImage = img;
       this.name = name;
+      this.content = content ?? null;
+      this.ruby = ruby ?? null;
+    },
+    onRename(name: string, content: string, ruby: string | null): void {
+      // 読みの推測が終わったら、絵文字名と読みだけを差し替える（画像は作り直さない）
+      if (this.ui.mode !== "text" || content !== this.content) return;
+      this.name = name;
+      this.ruby = ruby;
     },
   },
 });
@@ -121,7 +139,8 @@ export default defineComponent({
           <TextSource
               :show="ui.mode == 'text' && !ui.showTargetPanel"
               :emoji-size="emojiSize"
-              @render="onRender" />
+              @render="onRender"
+              @rename="onRename" />
           <FileSource
               :show="ui.mode == 'file' && !ui.showTargetPanel"
               @render="onRender" />
@@ -141,6 +160,8 @@ export default defineComponent({
               v-else
               :images="resultImages"
               :name="name"
+              :content="content"
+              :ruby="ruby"
               :show-target="ui.showTargetPanel"
               @toggle-show-target="onToggleShowTarget" />
         </GridItem>

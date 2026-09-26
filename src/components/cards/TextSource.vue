@@ -24,6 +24,7 @@ import { ColorStop } from "../../types";
 import { absColor } from "../../utils/color";
 import { makeTextImage } from "../../utils/textimage";
 import { jaToRoomaji } from "../../utils/jaToRoomaji";
+import { guessReading, Reading } from "../../utils/reading";
 import { EMOJI_SIZE } from "../../constants/emoji";
 import fonts from "../../constants/fonts";
 
@@ -52,7 +53,7 @@ export default defineComponent({
     show: { type: Boolean, required: true },
     emojiSize: { type: Number, default: 256 },
   },
-  emits: ["render"],
+  emits: ["render", "rename"],
   data() {
     return {
       conf: {
@@ -84,6 +85,9 @@ export default defineComponent({
       renderTimeout: null as ReturnType<typeof setTimeout> | null,
       nameTimeout: null as ReturnType<typeof setTimeout> | null,
       errorReading: false,
+      /** 入力した文字から推測した読み。readingFor の文字に対するもの */
+      reading: null as Reading | null,
+      readingFor: "",
     };
   },
   computed: {
@@ -96,15 +100,23 @@ export default defineComponent({
         pos: cs.pos,
       }));
     },
+    currentReading(): Reading | null {
+      return this.readingFor === this.conf.content ? this.reading : null;
+    },
+    autoFilename(): string {
+      // 読みが推測できていれば、読みをローマ字にする
+      return jaToRoomaji(this.currentReading?.text ?? this.conf.content).replace(/\n/g, "");
+    },
     currentFilename(): string {
       const filename = this.conf.filename?.replace(/\n/g, "");
-      const romaji = jaToRoomaji(this.conf.content);
-      return filename ? `${filename}.png` : `${romaji}.png`;
+      return filename ? `${filename}.png` : `${this.autoFilename}.png`;
     },
     currentFilename2(): string {
       const filename = this.conf.filename?.replace(/\n/g, "");
-      const romaji = jaToRoomaji(this.conf.content);
-      return filename || romaji;
+      return filename || this.autoFilename;
+    },
+    outputName(): string {
+      return this.conf.filename?.replace(/\n/g, "") || this.autoFilename;
     },
   },
   watch: {
@@ -137,6 +149,18 @@ export default defineComponent({
     },
     scheduleNameUpdate(): void {
       if (this.nameTimeout) clearTimeout(this.nameTimeout);
+
+      const { content } = this.conf;
+      if (content !== this.readingFor) {
+        // 入力が落ち着いてから読みを推測する
+        this.nameTimeout = setTimeout(async () => {
+          const reading = await guessReading(content);
+          if (content !== this.conf.content) return;
+          this.reading = reading;
+          this.readingFor = content;
+          if (content) this.$emit("rename", this.outputName, content, reading?.ruby ?? null);
+        }, 300);
+      }
 
       if (!this.errorReading) {
         this.updateName();
@@ -176,8 +200,7 @@ export default defineComponent({
           this.conf.cellAlign as "left" | "center" | "right" | "justify",
           this.conf.cellWidthBasis as "line" | "global",
         );
-        const name = this.conf.filename?.replace(/\n/g, "") || jaToRoomaji(this.conf.content).replace(/\n/g, "");
-        this.$emit("render", canvas, name);
+        this.$emit("render", canvas, this.outputName, this.conf.content, this.currentReading?.ruby ?? null);
       }
 
       window.setTimeout(() => {

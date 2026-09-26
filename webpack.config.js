@@ -51,6 +51,10 @@ module.exports = (env, argv) => ({
   },
   resolve: {
     extensions: [".ts", ".js"],
+    alias: {
+      // 読みの推測に使う。src 版は Node の path を使うので、ブラウザ向けにまとめた版を使う
+      kuromoji$: `${__dirname}/node_modules/kuromoji/build/kuromoji.js`,
+    },
   },
   plugins: [
     new DefinePlugin({
@@ -69,6 +73,11 @@ module.exports = (env, argv) => ({
         context: `${__dirname}/static`,
         from: "*",
         to: `${__dirname}/dist`,
+      }, {
+        // 読みの推測に使う辞書。漢字が入力されたときに初めて読み込む
+        context: `${__dirname}/node_modules/kuromoji/dict`,
+        from: "*.dat.gz",
+        to: `${__dirname}/dist/dict`,
       }],
     }),
   ],

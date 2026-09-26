@@ -137,4 +137,12 @@ export default defineComponent({
   box-shadow: none;
   transform: none;
 }
+
+.button:disabled,
+.button:disabled:hover,
+.button:disabled:active {
+  box-shadow: none;
+  opacity: 0.5;
+  transform: none;
+}
 </style>
